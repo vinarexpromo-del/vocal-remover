@@ -1,3 +1,543 @@
-git add index.html
-git commit -m "Connect real Modal API"
-git push
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SplitR — Free AI Vocal Remover</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--lime:#c8ff00;
+--lime-dim:rgba(200,255,0,0.12);
+--lime-border:rgba(200,255,0,0.3);
+--bg:#09090e;
+--bg2:#0f0f17;
+--bg3:#14141f;
+--text:#e8e4dc;
+--text2:rgba(232,228,220,0.5);
+--text3:rgba(232,228,220,0.25);
+--border:rgba(255,255,255,0.07);
+--border2:rgba(255,255,255,0.12);
+--blue:#64b4ff;
+--blue-dim:rgba(100,180,255,0.1);
+--rose:#ff8264;
+--rose-dim:rgba(255,130,100,0.1);
+--green:#4fffb0;
+--green-dim:rgba(79,255,176,0.1);
+--red:#ff5c5c;
+--red-dim:rgba(255,92,92,0.1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+nav{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:rgba(9,9,14,0.92);backdrop-filter:blur(12px);z-index:100;}
+.logo{font-family:'Space Mono',monospace;font-size:14px;color:var(--lime);letter-spacing:0.1em;text-decoration:none;}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:13px;color:var(--text2);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--lime-dim);border:0.5px solid var(--lime-border);color:var(--lime) !important;border-radius:6px;padding:6px 14px !important;font-size:12px !important;font-family:'Space Mono',monospace;letter-spacing:0.05em;transition:background 0.2s !important;}
+.nav-cta:hover{background:rgba(200,255,0,0.2) !important}
+.hero{padding:72px 40px 56px;max-width:1100px;margin:0 auto;position:relative;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--lime-dim);border:0.5px solid var(--lime-border);border-radius:20px;padding:5px 14px;font-size:11px;color:var(--lime);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:24px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--lime);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+h1{font-size:58px;font-weight:300;line-height:1.04;color:var(--text);max-width:620px;margin-bottom:16px;}
+h1 em{font-style:normal;color:var(--lime)}
+.hero-sub{font-size:16px;color:var(--text2);font-weight:300;max-width:480px;line-height:1.65;margin-bottom:40px;}
+.hero-stats{display:flex;gap:40px;margin-bottom:48px}
+.stat-num{font-family:'Space Mono',monospace;font-size:22px;color:var(--lime);}
+.stat-label{font-size:11px;color:var(--text3);margin-top:3px;letter-spacing:0.04em}
+.tool-card{background:var(--bg2);border:0.5px solid var(--border2);border-radius:20px;overflow:hidden;max-width:860px;}
+.mode-bar{display:flex;border-bottom:0.5px solid var(--border);padding:16px 24px;gap:8px;}
+.mode-btn{display:flex;align-items:center;gap:7px;background:none;border:0.5px solid var(--border2);border-radius:8px;padding:8px 16px;color:var(--text2);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;}
+.mode-btn i{font-size:15px}
+.mode-btn:hover{border-color:var(--border2);color:var(--text);background:rgba(255,255,255,0.04)}
+.mode-btn.active{background:var(--lime-dim);border-color:var(--lime-border);color:var(--lime);}
+.mode-label{font-size:11px;color:var(--text3);padding:8px 16px;display:flex;align-items:center;font-family:'Space Mono',monospace;letter-spacing:0.05em;}
+.drop-zone{padding:48px 40px;text-align:center;border:1.5px dashed var(--border2);margin:24px;border-radius:14px;cursor:pointer;transition:all 0.25s;position:relative;}
+.drop-zone:hover,.drop-zone.over{border-color:var(--lime-border);background:var(--lime-dim);}
+.drop-zone.over{border-style:solid}
+.drop-icon{width:56px;height:56px;border-radius:14px;background:rgba(200,255,0,0.08);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+.drop-icon i{font-size:24px;color:var(--lime)}
+.drop-title{font-size:17px;font-weight:500;margin-bottom:6px}
+.drop-hint{font-size:13px;color:var(--text2);margin-bottom:22px}
+.btn-upload{display:inline-flex;align-items:center;gap:8px;background:var(--lime);color:#09090e;border:none;border-radius:9px;padding:11px 24px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;}
+.btn-upload:hover{background:#d4ff33;transform:translateY(-1px)}
+.formats{display:flex;gap:6px;justify-content:center;margin-top:18px;flex-wrap:wrap;}
+.fmt{background:rgba(255,255,255,0.04);border:0.5px solid var(--border);border-radius:4px;padding:3px 9px;font-size:11px;font-family:'Space Mono',monospace;color:var(--text3);}
+#fileInput{display:none}
+.queue-section{display:none;padding:0 24px 24px}
+.queue-header{display:flex;align-items:center;justify-content:space-between;padding:16px 0 12px;border-top:0.5px solid var(--border);}
+.queue-title{font-size:12px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:0.07em;}
+.queue-actions{display:flex;gap:8px}
+.btn-ghost{background:none;border:0.5px solid var(--border2);border-radius:7px;padding:6px 12px;color:var(--text2);font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px;}
+.btn-ghost:hover{background:rgba(255,255,255,0.05);color:var(--text)}
+.btn-ghost i{font-size:13px}
+.btn-process{background:var(--lime);color:#09090e;border:none;border-radius:7px;padding:7px 16px;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+.btn-process:hover{background:#d4ff33}
+.btn-process i{font-size:13px}
+.track-list{display:flex;flex-direction:column;gap:8px}
+.track-item{background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:12px;transition:border-color 0.2s;}
+.track-item.processing{border-color:rgba(200,255,0,0.2)}
+.track-item.done{border-color:rgba(79,255,176,0.2)}
+.track-item.error{border-color:rgba(255,92,92,0.2)}
+.track-icon{width:36px;height:36px;border-radius:8px;background:rgba(100,180,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.track-icon i{font-size:17px;color:var(--blue)}
+.track-icon.done-icon{background:var(--green-dim)}
+.track-icon.done-icon i{color:var(--green)}
+.track-icon.error-icon{background:var(--red-dim)}
+.track-icon.error-icon i{color:var(--red)}
+.track-icon.spin i{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.track-info{min-width:0}
+.track-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px;}
+.track-meta{font-size:11px;color:var(--text3)}
+.progress-bar{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:6px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:2px;background:var(--lime);transition:width 0.4s ease;}
+.progress-fill.done-fill{background:var(--green)}
+.track-actions{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.btn-icon{background:none;border:0.5px solid var(--border);border-radius:7px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);transition:all 0.2s;}
+.btn-icon:hover{background:rgba(255,255,255,0.06);color:var(--text)}
+.btn-icon i{font-size:14px}
+.btn-download{background:var(--green-dim);border:0.5px solid rgba(79,255,176,0.25);border-radius:7px;padding:6px 12px;color:var(--green);font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s;}
+.btn-download:hover{background:rgba(79,255,176,0.2)}
+.btn-download i{font-size:13px}
+.status-badge{font-size:10px;font-family:'Space Mono',monospace;padding:3px 8px;border-radius:4px;letter-spacing:0.05em;}
+.badge-processing{background:var(--lime-dim);color:var(--lime)}
+.badge-done{background:var(--green-dim);color:var(--green)}
+.badge-error{background:var(--red-dim);color:var(--red)}
+.badge-queued{background:rgba(255,255,255,0.05);color:var(--text3)}
+.promo-banner{margin:0 24px 24px;background:linear-gradient(135deg,rgba(200,255,0,0.06) 0%,rgba(100,180,255,0.06) 100%);border:0.5px solid rgba(200,255,0,0.2);border-radius:14px;padding:20px 24px;display:none;align-items:center;justify-content:space-between;gap:16px;}
+.promo-eyebrow{font-size:10px;font-family:'Space Mono',monospace;color:var(--lime);letter-spacing:0.1em;margin-bottom:5px;}
+.promo-heading{font-size:15px;font-weight:500;color:var(--text)}
+.promo-sub{font-size:12px;color:var(--text2);margin-top:3px}
+.btn-promo{background:var(--lime);color:#09090e;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block;transition:all 0.2s;flex-shrink:0;}
+.btn-promo:hover{background:#d4ff33;transform:translateY(-1px)}
+.section{padding:80px 40px;max-width:1100px;margin:0 auto}
+.section-label{font-family:'Space Mono',monospace;font-size:11px;color:var(--lime);letter-spacing:0.1em;margin-bottom:16px;}
+.section-title{font-size:38px;font-weight:300;line-height:1.1;max-width:440px;margin-bottom:48px;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.step{background:var(--bg);padding:32px 28px}
+.step-num{font-family:'Space Mono',monospace;font-size:11px;color:var(--text3);letter-spacing:0.1em;margin-bottom:20px;}
+.step-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.step-title{font-size:15px;font-weight:500;margin-bottom:6px}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.usecases{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px}
+.usecase{background:var(--bg2);border:0.5px solid var(--border);border-radius:14px;padding:24px;}
+.usecase-icon{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:19px;}
+.usecase-title{font-size:14px;font-weight:500;margin-bottom:5px}
+.usecase-desc{font-size:12px;color:var(--text2);line-height:1.55}
+.promo-section{background:var(--bg2);border-top:0.5px solid var(--border);border-bottom:0.5px solid var(--border);padding:72px 40px;}
+.promo-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.promo-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(100,180,255,0.1);border:0.5px solid rgba(100,180,255,0.25);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--blue);font-family:'Space Mono',monospace;letter-spacing:0.05em;margin-bottom:20px;}
+.promo-big{font-size:36px;font-weight:300;line-height:1.1;margin-bottom:16px}
+.promo-big em{font-style:normal;color:var(--blue)}
+.promo-body{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:28px}
+.btn-cta-big{display:inline-flex;align-items:center;gap:9px;background:var(--blue);color:#09090e;border:none;border-radius:10px;padding:13px 26px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.btn-cta-big:hover{background:#82c8ff;transform:translateY(-1px)}
+.promo-features{display:flex;flex-direction:column;gap:12px}
+.promo-feat{display:flex;align-items:center;gap:12px;background:var(--bg3);border:0.5px solid var(--border);border-radius:10px;padding:14px 16px;}
+.promo-feat i{font-size:18px;color:var(--blue);flex-shrink:0}
+.promo-feat-title{font-size:13px;font-weight:500;margin-bottom:2px}
+.promo-feat-desc{font-size:12px;color:var(--text2)}
+footer{padding:40px;border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.footer-left{display:flex;flex-direction:column;gap:8px}
+.footer-copy{font-size:12px;color:var(--text3)}
+.footer-promo{font-size:12px;color:var(--text2);}
+.footer-promo a{color:var(--lime);text-decoration:none}
+.footer-promo a:hover{text-decoration:underline}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:12px;color:var(--text3);text-decoration:none}
+.footer-links a:hover{color:var(--text)}
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;}
+.popup-overlay.open{display:flex}
+.popup{background:var(--bg2);border:0.5px solid var(--border2);border-radius:20px;padding:36px;max-width:440px;width:90%;position:relative;animation:popIn 0.25s ease;}
+@keyframes popIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
+.popup-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;display:flex;align-items:center;transition:color 0.2s;}
+.popup-close:hover{color:var(--text)}
+.popup-icon{width:52px;height:52px;border-radius:12px;background:rgba(100,180,255,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
+.popup-icon i{font-size:24px;color:var(--blue)}
+.popup-title{font-size:22px;font-weight:500;margin-bottom:8px;line-height:1.2}
+.popup-body{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:24px}
+.popup-cta{display:flex;gap:10px;}
+.btn-popup-main{flex:1;background:var(--blue);color:#09090e;border:none;border-radius:9px;padding:12px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:7px;transition:all 0.2s;}
+.btn-popup-main:hover{background:#82c8ff}
+.btn-popup-skip{background:none;border:0.5px solid var(--border2);border-radius:9px;padding:12px 18px;color:var(--text2);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;}
+.btn-popup-skip:hover{background:rgba(255,255,255,0.05);color:var(--text)}
+@media(max-width:720px){
+nav{padding:16px 20px}
+.nav-links{gap:14px}
+h1{font-size:36px}
+.hero{padding:48px 20px 36px}
+.hero-stats{gap:24px}
+.steps,.usecases{grid-template-columns:1fr}
+.promo-inner{grid-template-columns:1fr}
+.section{padding:56px 20px}
+.promo-section{padding:56px 20px}
+footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
+.mode-bar{overflow-x:auto;flex-wrap:nowrap}
+.drop-zone{padding:32px 20px;margin:16px}
+.queue-section{padding:0 16px 16px}
+.promo-banner{flex-direction:column;align-items:flex-start;margin:0 16px 16px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+<a class="logo" href="#">SPLITR_</a>
+<div class="nav-links">
+<a href="#how">How it works</a>
+<a href="#usecases">Use cases</a>
+<a href="https://edm-ghost-production.com" target="_blank" class="nav-cta">Need a track? ↗</a>
+</div>
+</nav>
+
+<section class="hero">
+<div class="hero-badge"><span class="dot"></span>Free · No sign-up required</div>
+<h1>Remove vocals.<br>Or keep only <em>them.</em></h1>
+<p class="hero-sub">AI-powered stem separation for DJs, producers, and content creators. Upload a batch — get clean stems in seconds.</p>
+<div class="hero-stats">
+<div><div class="stat-num">2.4M+</div><div class="stat-label">TRACKS PROCESSED</div></div>
+<div><div class="stat-num">&lt;30s</div><div class="stat-label">AVG. PROCESSING</div></div>
+<div><div class="stat-num">320kbps</div><div class="stat-label">OUTPUT QUALITY</div></div>
+</div>
+
+<div class="tool-card">
+<div class="mode-bar">
+<span class="mode-label">MODE</span>
+<button class="mode-btn active" onclick="setMode(this,'vocals')" data-mode="vocals">
+<i class="ti ti-microphone"></i>Vocals only
+</button>
+<button class="mode-btn" onclick="setMode(this,'instrumental')" data-mode="instrumental">
+<i class="ti ti-guitar-pick"></i>Instrumental only
+</button>
+<button class="mode-btn" onclick="setMode(this,'stems')" data-mode="stems">
+<i class="ti ti-adjustments-horizontal"></i>4 stems
+</button>
+</div>
+
+<div class="drop-zone" id="dropZone"
+ondragover="ev(event,'over')"
+ondragleave="ev(event,'leave')"
+ondrop="ev(event,'drop')"
+onclick="document.getElementById('fileInput').click()">
+<div class="drop-icon"><i class="ti ti-cloud-upload"></i></div>
+<div class="drop-title">Drop tracks here</div>
+<div class="drop-hint">Or click to browse files — up to 10 files at once</div>
+<button class="btn-upload" onclick="event.stopPropagation();document.getElementById('fileInput').click()">
+<i class="ti ti-file-music"></i>Select files
+</button>
+<div class="formats">
+<span class="fmt">MP3</span><span class="fmt">WAV</span><span class="fmt">FLAC</span>
+<span class="fmt">AAC</span><span class="fmt">OGG</span><span class="fmt">M4A</span><span class="fmt">AIFF</span>
+</div>
+</div>
+<input type="file" id="fileInput" multiple accept=".mp3,.wav,.flac,.aac,.ogg,.m4a,.aiff" onchange="addFiles(this.files)">
+
+<div class="queue-section" id="queueSection">
+<div class="queue-header">
+<span class="queue-title">QUEUE</span>
+<div class="queue-actions">
+<button class="btn-ghost" onclick="addMoreFiles()"><i class="ti ti-plus"></i>Add more</button>
+<button class="btn-ghost" onclick="clearAll()"><i class="ti ti-trash"></i>Clear all</button>
+<button class="btn-process" id="processBtn" onclick="processAll()"><i class="ti ti-player-play"></i>Process all</button>
+</div>
+</div>
+<div class="track-list" id="trackList"></div>
+</div>
+
+<div class="promo-banner" id="promoBanner">
+<div class="promo-text">
+<div class="promo-eyebrow">POWERED YOUR TRACK? NOW LEVEL UP</div>
+<div class="promo-heading">Need a professional EDM track made for you?</div>
+<div class="promo-sub">Ghost production by top producers — delivered fast, fully licensed.</div>
+</div>
+<a href="https://edm-ghost-production.com" target="_blank" class="btn-promo">Explore tracks ↗</a>
+</div>
+</div>
+</section>
+
+<section class="section" id="how">
+<div class="section-label">HOW IT WORKS</div>
+<h2 class="section-title">Three steps. Zero complexity.</h2>
+<div class="steps">
+<div class="step">
+<div class="step-num">01</div>
+<div class="step-icon" style="background:var(--lime-dim)"><i class="ti ti-upload" style="font-size:20px;color:var(--lime)"></i></div>
+<div class="step-title">Upload your files</div>
+<div class="step-desc">Drag & drop up to 10 tracks at once. MP3, WAV, FLAC and more. No file size limit on the free tier.</div>
+</div>
+<div class="step">
+<div class="step-num">02</div>
+<div class="step-icon" style="background:var(--blue-dim)"><i class="ti ti-cpu" style="font-size:20px;color:var(--blue)"></i></div>
+<div class="step-title">AI splits the stems</div>
+<div class="step-desc">Demucs v4 by Meta processes each track. Vocals, bass, drums, and other instruments separated with studio precision.</div>
+</div>
+<div class="step">
+<div class="step-num">03</div>
+<div class="step-icon" style="background:var(--green-dim)"><i class="ti ti-download" style="font-size:20px;color:var(--green)"></i></div>
+<div class="step-title">Download your stems</div>
+<div class="step-desc">Get each stem as a separate high-quality WAV file. Use them in your mix, sample pack, or content.</div>
+</div>
+</div>
+</section>
+
+<section class="section" id="usecases" style="padding-top:0">
+<div class="section-label">USE CASES</div>
+<h2 class="section-title">Built for producers & creators</h2>
+<div class="usecases">
+<div class="usecase">
+<div class="usecase-icon" style="background:var(--lime-dim)"><i class="ti ti-vinyl" style="color:var(--lime)"></i></div>
+<div class="usecase-title">DJs & Remixers</div>
+<div class="usecase-desc">Extract clean instrumentals or acapellas for bootlegs, mashups, and live remixes. Batch-process your entire crate before a gig.</div>
+</div>
+<div class="usecase">
+<div class="usecase-icon" style="background:var(--blue-dim)"><i class="ti ti-music" style="color:var(--blue)"></i></div>
+<div class="usecase-title">Producers & Beatmakers</div>
+<div class="usecase-desc">Sample vocals from any track, study individual stems, or build reference tracks. Isolate the exact element you need.</div>
+</div>
+<div class="usecase">
+<div class="usecase-icon" style="background:rgba(255,130,100,0.12)"><i class="ti ti-brand-youtube" style="color:var(--rose)"></i></div>
+<div class="usecase-title">YouTube & TikTok Creators</div>
+<div class="usecase-desc">Get copyright-safe instrumentals for your videos. No more ContentID strikes — use clean backing tracks without vocals.</div>
+</div>
+<div class="usecase">
+<div class="usecase-icon" style="background:var(--green-dim)"><i class="ti ti-microphone-2" style="color:var(--green)"></i></div>
+<div class="usecase-title">Singers & Vocalists</div>
+<div class="usecase-desc">Pull the instrumental from any song to practice or perform. Create karaoke tracks from your favorite music instantly.</div>
+</div>
+</div>
+</section>
+
+<div class="promo-section">
+<div class="promo-inner">
+<div>
+<div class="promo-tag"><i class="ti ti-sparkles" style="font-size:12px"></i>PARTNER SERVICE</div>
+<h2 class="promo-big">Need a <em>full track</em><br>made for you?</h2>
+<p class="promo-body">SplitR gets the most out of existing music. But if you need an original, radio-ready EDM track — ghost production is the fastest route. Top producers, full license transfer, no credits required.</p>
+<a href="https://edm-ghost-production.com" target="_blank" class="btn-cta-big">
+<i class="ti ti-external-link"></i>edm-ghost-production.com
+</a>
+</div>
+<div class="promo-features">
+<div class="promo-feat"><i class="ti ti-shield-check"></i><div class="promo-feat-text"><div class="promo-feat-title">100% license transfer</div><div class="promo-feat-desc">Release under your name on Spotify, Apple Music, Beatport — anywhere.</div></div></div>
+<div class="promo-feat"><i class="ti ti-clock"></i><div class="promo-feat-text"><div class="promo-feat-title">Fast turnaround</div><div class="promo-feat-desc">Professional EDM tracks delivered in days, not months.</div></div></div>
+<div class="promo-feat"><i class="ti ti-chart-bar"></i><div class="promo-feat-text"><div class="promo-feat-title">All major EDM genres</div><div class="promo-feat-desc">House, techno, trance, drum & bass, melodic techno and more.</div></div></div>
+<div class="promo-feat"><i class="ti ti-headphones"></i><div class="promo-feat-text"><div class="promo-feat-title">Studio-grade quality</div><div class="promo-feat-desc">Mixed and mastered for clubs, streaming and broadcast.</div></div></div>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="footer-left">
+<a class="logo" href="#">SPLITR_</a>
+<div class="footer-copy">© 2025 SplitR. Free to use, forever.</div>
+<div class="footer-promo">Need an original EDM track? → <a href="https://edm-ghost-production.com" target="_blank">edm-ghost-production.com</a></div>
+</div>
+<div class="footer-links">
+<a href="#">Privacy</a><a href="#">Terms</a><a href="#">API</a>
+<a href="https://edm-ghost-production.com" target="_blank">Ghost Production ↗</a>
+</div>
+</footer>
+
+<div class="popup-overlay" id="popup">
+<div class="popup">
+<button class="popup-close" onclick="closePopup()"><i class="ti ti-x"></i></button>
+<div class="popup-icon"><i class="ti ti-music-bolt"></i></div>
+<div class="popup-title">Your stems are ready — what's next?</div>
+<div class="popup-body">Now that you have the building blocks, why not release your own original track? Our partner service handles full EDM ghost production — delivered fast, 100% yours.</div>
+<div class="popup-cta">
+<a href="https://edm-ghost-production.com" target="_blank" class="btn-popup-main">
+<i class="ti ti-external-link"></i>Check EDM ghost production
+</a>
+<button class="btn-popup-skip" onclick="closePopup()">Not now</button>
+</div>
+</div>
+</div>
+
+<script>
+// ============================================================
+// КОНФИГ — адрес Modal API
+// ============================================================
+const API_URL = 'https://vinarexpromo-del--vocal-remover-api.modal.run';
+
+let tracks = [];
+let currentMode = 'vocals';
+let processingDone = false;
+
+function setMode(btn, mode) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentMode = mode;
+}
+
+function ev(e, type) {
+  e.preventDefault();
+  const z = document.getElementById('dropZone');
+  if (type === 'over') z.classList.add('over');
+  else if (type === 'leave') z.classList.remove('over');
+  else if (type === 'drop') { z.classList.remove('over'); addFiles(e.dataTransfer.files); }
+}
+
+function addMoreFiles() { document.getElementById('fileInput').click(); }
+
+function addFiles(files) {
+  if (!files.length) return;
+  Array.from(files).slice(0, 10 - tracks.length).forEach(f => {
+    tracks.push({ file: f, id: Date.now() + Math.random(), status: 'queued', progress: 0, resultFiles: null });
+  });
+  renderQueue();
+}
+
+function renderQueue() {
+  const qs = document.getElementById('queueSection');
+  const tl = document.getElementById('trackList');
+  if (!tracks.length) { qs.style.display = 'none'; return; }
+  qs.style.display = 'block';
+  tl.innerHTML = tracks.map((t, i) => {
+    const size = (t.file.size / (1024*1024)).toFixed(1) + ' MB';
+    const name = t.file.name.length > 40 ? t.file.name.slice(0,38)+'…' : t.file.name;
+    let iconClass = '', iconEl = 'ti-file-music', badge = '';
+    let actionEl = `<button class="btn-icon" onclick="removeTrack(${i})" title="Remove"><i class="ti ti-x"></i></button>`;
+
+    if (t.status === 'queued') {
+      badge = '<span class="status-badge badge-queued">QUEUED</span>';
+    } else if (t.status === 'processing') {
+      iconClass = 'spin'; iconEl = 'ti-loader-2';
+      badge = '<span class="status-badge badge-processing">PROCESSING</span>';
+      actionEl = '';
+    } else if (t.status === 'done') {
+      iconClass = 'done-icon'; iconEl = 'ti-check';
+      badge = '<span class="status-badge badge-done">DONE</span>';
+      // Кнопки скачивания для каждого стема
+      if (t.resultFiles) {
+        const btns = Object.entries(t.resultFiles).map(([stem, url]) =>
+          `<a class="btn-download" href="${url}" download><i class="ti ti-download"></i>${stem}</a>`
+        ).join('');
+        actionEl = `<div style="display:flex;gap:6px;flex-wrap:wrap">${btns}</div>`;
+      }
+    } else if (t.status === 'error') {
+      iconClass = 'error-icon'; iconEl = 'ti-alert-circle';
+      badge = `<span class="status-badge badge-error">${t.errorMsg || 'ERROR'}</span>`;
+      actionEl = `<button class="btn-icon" onclick="removeTrack(${i})" title="Remove"><i class="ti ti-x"></i></button>`;
+    }
+
+    const barColor = t.status === 'done' ? 'done-fill' : '';
+    return `
+    <div class="track-item ${t.status}" id="track-${i}">
+      <div class="track-icon ${iconClass}"><i class="ti ${iconEl}"></i></div>
+      <div class="track-info">
+        <div class="track-name">${name}</div>
+        <div class="track-meta">${size} · ${modeLabel()} · ${badge}</div>
+        <div class="progress-bar"><div class="progress-fill ${barColor}" style="width:${t.progress}%"></div></div>
+      </div>
+      <div class="track-actions">${actionEl}</div>
+    </div>`;
+  }).join('');
+}
+
+function modeLabel() {
+  return {vocals:'Vocals', instrumental:'Instrumental', stems:'4 stems'}[currentMode];
+}
+
+function removeTrack(i) {
+  tracks.splice(i, 1);
+  if (!tracks.length) processingDone = false;
+  renderQueue();
+}
+
+function clearAll() {
+  tracks = [];
+  processingDone = false;
+  document.getElementById('promoBanner').style.display = 'none';
+  renderQueue();
+}
+
+function processAll() {
+  const hasQueued = tracks.some(t => t.status === 'queued');
+  if (!hasQueued) return;
+  document.getElementById('processBtn').disabled = true;
+  document.getElementById('processBtn').innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i>Processing…';
+  processNext();
+}
+
+async function processNext() {
+  const idx = tracks.findIndex(t => t.status === 'queued');
+  if (idx === -1) {
+    finishAll();
+    return;
+  }
+
+  const track = tracks[idx];
+  track.status = 'processing';
+  track.progress = 10;
+  renderQueue();
+
+  // Анимируем прогресс-бар пока идёт обработка
+  const progressInterval = setInterval(() => {
+    if (track.progress < 90) {
+      track.progress += (90 - track.progress) * 0.05;
+      const fill = document.querySelector(`#track-${idx} .progress-fill`);
+      if (fill) fill.style.width = track.progress + '%';
+    }
+  }, 500);
+
+  try {
+    const formData = new FormData();
+    formData.append('file', track.file);
+    formData.append('mode', currentMode);
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      body: formData,
+    });
+
+    clearInterval(progressInterval);
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (result.error) {
+      throw new Error(result.error);
+    }
+
+    track.status = 'done';
+    track.progress = 100;
+    track.resultFiles = result.files;
+
+  } catch (err) {
+    clearInterval(progressInterval);
+    track.status = 'error';
+    track.progress = 0;
+    track.errorMsg = err.message.slice(0, 30);
+    console.error('Processing error:', err);
+  }
+
+  renderQueue();
+  setTimeout(() => processNext(), 300);
+}
+
+function finishAll() {
+  document.getElementById('processBtn').disabled = false;
+  document.getElementById('processBtn').innerHTML = '<i class="ti ti-player-play"></i>Process all';
+  const hasDone = tracks.some(t => t.status === 'done');
+  if (hasDone) {
+    document.getElementById('promoBanner').style.display = 'flex';
+    if (!processingDone) {
+      processingDone = true;
+      setTimeout(() => document.getElementById('popup').classList.add('open'), 2000);
+    }
+  }
+}
+
+function closePopup() { document.getElementById('popup').classList.remove('open'); }
+document.getElementById('popup').addEventListener('click', function(e) { if (e.target === this) closePopup(); });
+</script>
+</body>
+</html>
