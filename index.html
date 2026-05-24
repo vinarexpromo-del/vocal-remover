@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">  
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SPLITR — Free AI Audio Toolkit</title>
@@ -601,6 +600,71 @@ transition:all 0.2s;
 .vo-status.ready{background:var(--green-dim);color:var(--green)}
 .vo-status.error{background:var(--red-dim);color:var(--red)}
 @media(max-width:720px){.vo-grid{grid-template-columns:1fr}.voice-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ANALYZER */
+.analyzer-section{display:none;padding:24px}
+.analyzer-section.active{display:block}
+.analyzer-drop{
+  border:1.5px dashed var(--border2);
+  border-radius:14px;padding:40px;
+  text-align:center;cursor:pointer;
+  transition:all 0.25s;margin-bottom:20px;
+}
+.analyzer-drop:hover,.analyzer-drop.over{
+  border-color:var(--lime-border);background:var(--lime-dim);
+}
+.analyzer-drop-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:var(--lime-dim);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 14px;
+}
+.analyzer-drop-icon i{font-size:22px;color:var(--lime)}
+.analyzer-drop-title{font-size:15px;font-weight:500;margin-bottom:6px}
+.analyzer-drop-hint{font-size:12px;color:var(--text2)}
+.analyzer-results{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+.result-card{
+  background:var(--bg3);
+  border:0.5px solid var(--border);
+  border-radius:14px;padding:20px;
+  text-align:center;
+  transition:border-color 0.2s;
+}
+.result-card.active-card{border-color:var(--lime-border)}
+.result-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 12px;
+}
+.result-icon i{font-size:18px}
+.result-label{font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:0.07em;margin-bottom:8px}
+.result-value{font-size:28px;font-weight:500;color:var(--text);line-height:1;margin-bottom:4px}
+.result-sub{font-size:11px;color:var(--text2)}
+.analyzer-loading{
+  text-align:center;padding:40px;display:none;
+}
+.analyzer-loading i{font-size:32px;color:var(--lime);animation:spin 1s linear infinite}
+.analyzer-loading p{font-size:13px;color:var(--text2);margin-top:12px}
+.analyzer-filename{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg3);border:0.5px solid var(--border);
+  border-radius:10px;padding:12px 16px;margin-bottom:16px;
+}
+.analyzer-filename i{font-size:16px;color:var(--blue)}
+.analyzer-filename span{font-size:13px;color:var(--text);flex:1}
+.btn-analyze{
+  background:var(--lime);border:none;border-radius:8px;
+  padding:8px 16px;color:#09090e;font-size:12px;font-weight:500;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+  display:flex;align-items:center;gap:6px;transition:all 0.2s;
+  flex-shrink:0;
+}
+.btn-analyze:hover{background:#d4ff33}
+.btn-analyze i{font-size:13px}
+@media(max-width:720px){.analyzer-results{grid-template-columns:repeat(2,1fr)}}
 /* RESPONSIVE */
 @media(max-width:720px){
 nav{padding:16px 20px}
@@ -659,6 +723,9 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
       </button>
       <button class="mode-btn" onclick="setMode(this,'voiceover')" data-mode="voiceover">
         <i class="ti ti-speakerphone"></i>AI Voiceover
+      </button>
+      <button class="mode-btn" onclick="setMode(this,'analyzer')" data-mode="analyzer">
+        <i class="ti ti-music-search"></i>BPM & Key
       </button>
     </div>
 
@@ -752,6 +819,60 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
           <button class="vo-dl-btn" id="voDlBtn" onclick="downloadVoiceover()">
             <i class="ti ti-download"></i>Download
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYZER SECTION -->
+    <div class="analyzer-section" id="analyzerSection">
+      <div class="analyzer-drop" id="analyzerDrop"
+        ondragover="analyzerEv(event,'over')"
+        ondragleave="analyzerEv(event,'leave')"
+        ondrop="analyzerEv(event,'drop')"
+        onclick="document.getElementById('analyzerFileInput').click()">
+        <div class="analyzer-drop-icon"><i class="ti ti-music-search"></i></div>
+        <div class="analyzer-drop-title">Drop a track to analyze</div>
+        <div class="analyzer-drop-hint">Detects BPM, key, Camelot number and energy level</div>
+      </div>
+      <input type="file" id="analyzerFileInput" accept=".mp3,.wav,.flac,.aac,.ogg,.m4a" style="display:none" onchange="analyzerFileSelected(this.files[0])">
+
+      <div id="analyzerFilename" style="display:none" class="analyzer-filename">
+        <i class="ti ti-file-music"></i>
+        <span id="analyzerFilenameTxt"></span>
+        <button class="btn-analyze" id="analyzerBtn" onclick="runAnalyzer()">
+          <i class="ti ti-sparkles"></i>Analyze
+        </button>
+      </div>
+
+      <div class="analyzer-loading" id="analyzerLoading">
+        <i class="ti ti-loader-2"></i>
+        <p>Analyzing track…</p>
+      </div>
+
+      <div class="analyzer-results" id="analyzerResults" style="display:none">
+        <div class="result-card active-card">
+          <div class="result-icon" style="background:var(--lime-dim)"><i class="ti ti-metronome" style="color:var(--lime)"></i></div>
+          <div class="result-label">BPM</div>
+          <div class="result-value" id="resBpm">—</div>
+          <div class="result-sub">beats per minute</div>
+        </div>
+        <div class="result-card">
+          <div class="result-icon" style="background:var(--blue-dim)"><i class="ti ti-music" style="color:var(--blue)"></i></div>
+          <div class="result-label">KEY</div>
+          <div class="result-value" id="resKey" style="font-size:18px;padding-top:6px">—</div>
+          <div class="result-sub">musical key</div>
+        </div>
+        <div class="result-card">
+          <div class="result-icon" style="background:rgba(168,139,250,0.12)"><i class="ti ti-wheel" style="color:#a78bfa"></i></div>
+          <div class="result-label">CAMELOT</div>
+          <div class="result-value" id="resCamelot">—</div>
+          <div class="result-sub">harmonic mixing</div>
+        </div>
+        <div class="result-card">
+          <div class="result-icon" style="background:rgba(255,130,100,0.12)"><i class="ti ti-bolt" style="color:var(--rose)"></i></div>
+          <div class="result-label">ENERGY</div>
+          <div class="result-value" id="resEnergy">—</div>
+          <div class="result-sub">intensity level</div>
         </div>
       </div>
     </div>
@@ -1014,9 +1135,16 @@ function setMode(btn, mode) {
     document.getElementById('dropZone').style.display = 'none';
     document.getElementById('queueSection').style.display = 'none';
     document.getElementById('voSection').classList.add('active');
+    document.getElementById('analyzerSection').classList.remove('active');
+  } else if (mode === 'analyzer') {
+    document.getElementById('dropZone').style.display = 'none';
+    document.getElementById('queueSection').style.display = 'none';
+    document.getElementById('voSection').classList.remove('active');
+    document.getElementById('analyzerSection').classList.add('active');
   } else {
     document.getElementById('dropZone').style.display = '';
     document.getElementById('voSection').classList.remove('active');
+    document.getElementById('analyzerSection').classList.remove('active');
     renderQueue();
   }
 }
@@ -1332,6 +1460,58 @@ function downloadVoiceover() {
   document.body.appendChild(a);
   a.click();
   a.remove();
+}
+
+
+let analyzerFile = null;
+
+function analyzerEv(e, type) {
+  e.preventDefault();
+  const z = document.getElementById('analyzerDrop');
+  if (type === 'over') z.classList.add('over');
+  else if (type === 'leave') z.classList.remove('over');
+  else if (type === 'drop') {
+    z.classList.remove('over');
+    if (e.dataTransfer.files[0]) analyzerFileSelected(e.dataTransfer.files[0]);
+  }
+}
+
+function analyzerFileSelected(file) {
+  analyzerFile = file;
+  document.getElementById('analyzerFilenameTxt').textContent = file.name;
+  document.getElementById('analyzerFilename').style.display = 'flex';
+  document.getElementById('analyzerResults').style.display = 'none';
+  document.getElementById('analyzerLoading').style.display = 'none';
+}
+
+async function runAnalyzer() {
+  if (!analyzerFile) return;
+
+  document.getElementById('analyzerLoading').style.display = 'block';
+  document.getElementById('analyzerResults').style.display = 'none';
+  document.getElementById('analyzerBtn').disabled = true;
+
+  try {
+    const formData = new FormData();
+    formData.append('file', analyzerFile, analyzerFile.name);
+
+    const resp = await fetch(API_URL + '/analyze', { method: 'POST', body: formData });
+    if (!resp.ok) throw new Error('Server error ' + resp.status);
+    const data = await resp.json();
+
+    document.getElementById('resBpm').textContent = data.bpm;
+    document.getElementById('resKey').textContent = data.key;
+    document.getElementById('resCamelot').textContent = data.camelot;
+    document.getElementById('resEnergy').textContent = data.energy;
+
+    document.getElementById('analyzerResults').style.display = 'grid';
+  } catch(e) {
+    alert('Analysis failed: ' + e.message);
+    console.error(e);
+  }
+
+  document.getElementById('analyzerLoading').style.display = 'none';
+  document.getElementById('analyzerBtn').disabled = false;
 }
 
 function closePopup() {
