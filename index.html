@@ -944,22 +944,9 @@ function finishAll() {
 }
 
 
-async function downloadFile(url, filename) {
-  try {
-    const proxyUrl = API_URL + '/download?url=' + encodeURIComponent(url) + '&filename=' + encodeURIComponent(filename);
-    const resp = await fetch(proxyUrl);
-    if (!resp.ok) throw new Error('proxy error');
-    const blob = await resp.blob();
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
-  } catch(e) {
-    // fallback: open in new tab
-    window.open(url, '_blank');
-  }
+function downloadFile(url, filename) {
+  // Supabase serves audio/mpeg — browser downloads it directly via location assign
+  window.location.href = url;
 }
 
 function closePopup() {
