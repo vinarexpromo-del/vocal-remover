@@ -779,14 +779,17 @@ function renderQueue() {
       iconClass = 'done-icon'; iconEl = 'ti-check';
       badge = '<span class="status-badge badge-done">DONE</span>';
       const entries = Object.entries(t.resultFiles);
+      const baseName = t.file.name.replace(/\.[^.]+$/, '');
       if (entries.length === 1) {
         const [stemName, url] = entries[0];
-        actionEl = `<a class="btn-download" href="${url}" target="_blank" download><i class="ti ti-download"></i>Download</a>`;
+        const fname = baseName + '_' + stemName + '.mp3';
+        actionEl = `<button class="btn-download" onclick="downloadFile('${url}','${fname}')"><i class="ti ti-download"></i>Download</button>`;
       } else {
         // Multiple stems (4-stem mode)
-        const btns = entries.map(([stemName, url]) =>
-          `<a class="btn-download" href="${url}" target="_blank" download><i class="ti ti-download"></i>${stemName}</a>`
-        ).join('');
+        const btns = entries.map(([stemName, url]) => {
+          const fname = baseName + '_' + stemName + '.mp3';
+          return `<button class="btn-download" onclick="downloadFile('${url}','${fname}')"><i class="ti ti-download"></i>${stemName}</button>`;
+        }).join('');
         actionEl = `<div class="btn-download-multi">${btns}</div>`;
       }
     } else if (t.status === 'error') {
@@ -937,6 +940,23 @@ function finishAll() {
       processingDone = true;
       setTimeout(() => document.getElementById('popup').classList.add('open'), 2000);
     }
+  }
+}
+
+
+async function downloadFile(url, filename) {
+  try {
+    const resp = await fetch(url);
+    const blob = await resp.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  } catch(e) {
+    // fallback: open in new tab
+    window.open(url, '_blank');
   }
 }
 
