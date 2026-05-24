@@ -530,6 +530,76 @@ details[open] .faq-icon{transform:rotate(45deg)}
   .faq-grid{grid-template-columns:1fr}
   .faq-section{padding:56px 20px}
 }
+
+/* VOICEOVER */
+.vo-section{display:none;padding:24px}
+.vo-section.active{display:block}
+.vo-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+.vo-label{font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:0.07em;margin-bottom:10px}
+.voice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.voice-btn{
+background:var(--bg3);border:0.5px solid var(--border);
+border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left;
+transition:all 0.2s;
+}
+.voice-btn:hover{border-color:var(--border2)}
+.voice-btn.active{background:#0d0d1f;border-color:rgba(100,180,255,0.4)}
+.voice-name{font-size:12px;color:var(--text);font-weight:500;margin-bottom:2px;display:flex;align-items:center;gap:6px}
+.voice-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.voice-tag{font-size:10px;color:var(--text3)}
+.vo-textarea{
+width:100%;background:var(--bg3);
+border:0.5px solid var(--border);border-radius:10px;
+padding:14px;color:var(--text);font-size:13px;
+font-family:'DM Sans',sans-serif;resize:none;outline:none;line-height:1.6;
+transition:border-color 0.2s;
+}
+.vo-textarea:focus{border-color:var(--border2)}
+.vo-textarea::placeholder{color:var(--text3)}
+.vo-bottom{display:flex;align-items:center;gap:12px;margin-top:10px}
+.vo-chars{font-size:11px;color:var(--text3);font-family:'Space Mono',monospace}
+.btn-generate{
+background:var(--blue);border:none;border-radius:9px;
+padding:10px 22px;color:#09090e;font-size:13px;font-weight:500;
+font-family:'DM Sans',sans-serif;
+cursor:pointer;display:flex;align-items:center;gap:7px;
+margin-left:auto;transition:all 0.2s;
+}
+.btn-generate:hover{background:#82c8ff}
+.btn-generate:disabled{opacity:0.5;cursor:not-allowed}
+.btn-generate i{font-size:14px}
+.vo-player{
+background:var(--bg3);
+border:0.5px solid rgba(100,180,255,0.2);
+border-radius:12px;padding:14px 18px;
+display:flex;align-items:center;gap:14px;
+}
+.vo-play-btn{
+width:36px;height:36px;border-radius:50%;
+background:rgba(100,180,255,0.15);
+border:0.5px solid rgba(100,180,255,0.3);
+display:flex;align-items:center;justify-content:center;
+cursor:pointer;flex-shrink:0;transition:all 0.2s;
+}
+.vo-play-btn:hover{background:rgba(100,180,255,0.25)}
+.vo-play-btn i{font-size:16px;color:var(--blue)}
+.vo-waveform{flex:1;height:32px;display:flex;align-items:center;gap:2px}
+.vo-bar{width:3px;border-radius:2px;background:var(--blue);opacity:0.5}
+.vo-dl-btn{
+background:var(--green-dim);
+border:0.5px solid rgba(79,255,176,0.25);
+border-radius:7px;padding:6px 12px;
+color:var(--green);font-size:12px;font-weight:500;
+font-family:'DM Sans',sans-serif;
+cursor:pointer;display:flex;align-items:center;gap:5px;
+transition:all 0.2s;
+}
+.vo-dl-btn:hover{background:rgba(79,255,176,0.2)}
+.vo-status{font-size:10px;font-family:'Space Mono',monospace;padding:3px 8px;border-radius:4px}
+.vo-status.generating{background:var(--lime-dim);color:var(--lime)}
+.vo-status.ready{background:var(--green-dim);color:var(--green)}
+.vo-status.error{background:var(--red-dim);color:var(--red)}
+@media(max-width:720px){.vo-grid{grid-template-columns:1fr}.voice-grid{grid-template-columns:repeat(2,1fr)}}
 /* RESPONSIVE */
 @media(max-width:720px){
 nav{padding:16px 20px}
@@ -586,6 +656,9 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
       <button class="mode-btn" onclick="setMode(this,'stems')" data-mode="stems">
         <i class="ti ti-adjustments-horizontal"></i>4 stems
       </button>
+      <button class="mode-btn" onclick="setMode(this,'voiceover')" data-mode="voiceover">
+        <i class="ti ti-speakerphone"></i>AI Voiceover
+      </button>
     </div>
 
     <!-- DROP ZONE -->
@@ -623,6 +696,63 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
         </div>
       </div>
       <div class="track-list" id="trackList"></div>
+    </div>
+
+    <!-- VOICEOVER SECTION -->
+    <div class="vo-section" id="voSection">
+      <div class="vo-grid">
+        <div>
+          <div class="vo-label">VOICE</div>
+          <div class="voice-grid">
+            <button class="voice-btn active" onclick="selectVoice(this,'sarah')">
+              <div class="voice-name"><span class="voice-dot" style="background:#64b4ff"></span>Sarah</div>
+              <div class="voice-tag">Female · EN</div>
+            </button>
+            <button class="voice-btn" onclick="selectVoice(this,'marcus')">
+              <div class="voice-name"><span class="voice-dot" style="background:#c8ff00"></span>Marcus</div>
+              <div class="voice-tag">Male · EN</div>
+            </button>
+            <button class="voice-btn" onclick="selectVoice(this,'elena')">
+              <div class="voice-name"><span class="voice-dot" style="background:#4fffb0"></span>Elena</div>
+              <div class="voice-tag">Female · EU</div>
+            </button>
+            <button class="voice-btn" onclick="selectVoice(this,'james')">
+              <div class="voice-name"><span class="voice-dot" style="background:#ff8264"></span>James</div>
+              <div class="voice-tag">Male · UK</div>
+            </button>
+            <button class="voice-btn" onclick="selectVoice(this,'aria')">
+              <div class="voice-name"><span class="voice-dot" style="background:#a78bfa"></span>Aria</div>
+              <div class="voice-tag">Female · Soft</div>
+            </button>
+            <button class="voice-btn" onclick="selectVoice(this,'echo')">
+              <div class="voice-name"><span class="voice-dot" style="background:#fbbf24"></span>Echo</div>
+              <div class="voice-tag">Male · Deep</div>
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="vo-label">TEXT</div>
+          <textarea class="vo-textarea" id="voText" rows="6" placeholder="Type or paste your text here…" oninput="updateChars()"></textarea>
+          <div class="vo-bottom">
+            <span class="vo-chars" id="voChars">0 / 5000</span>
+            <button class="btn-generate" id="generateBtn" onclick="generateVoiceover()">
+              <i class="ti ti-sparkles"></i>Generate
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="voPlayerWrap" style="display:none">
+        <div class="vo-label" style="margin-bottom:10px">RESULT <span class="vo-status ready" id="voStatusBadge">READY</span></div>
+        <div class="vo-player">
+          <button class="vo-play-btn" id="voPlayBtn" onclick="togglePlay()">
+            <i class="ti ti-player-play" id="voPlayIcon"></i>
+          </button>
+          <div class="vo-waveform" id="voWaveform"></div>
+          <button class="vo-dl-btn" id="voDlBtn" onclick="downloadVoiceover()">
+            <i class="ti ti-download"></i>Download
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- PROMO BANNER (shown after processing) -->
@@ -852,6 +982,15 @@ function setMode(btn, mode) {
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   currentMode = mode;
+  if (mode === 'voiceover') {
+    document.getElementById('dropZone').style.display = 'none';
+    document.getElementById('queueSection').style.display = 'none';
+    document.getElementById('voSection').classList.add('active');
+  } else {
+    document.getElementById('dropZone').style.display = '';
+    document.getElementById('voSection').classList.remove('active');
+    renderQueue();
+  }
 }
 
 function ev(e, type) {
@@ -1070,6 +1209,98 @@ function downloadFile(url, filename) {
   a.href = url;
   a.target = '_blank';
   a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+
+let currentVoice = 'sarah';
+let voAudio = null;
+let voUrl = null;
+
+function selectVoice(btn, voice) {
+  document.querySelectorAll('.voice-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentVoice = voice;
+}
+
+function updateChars() {
+  const len = document.getElementById('voText').value.length;
+  document.getElementById('voChars').textContent = len + ' / 5000';
+}
+
+function buildWaveform() {
+  const wv = document.getElementById('voWaveform');
+  wv.innerHTML = '';
+  const heights = [8,14,22,18,28,32,24,20,30,26,18,24,32,28,16,22,30,20,28,24,18,26,32,22,16,28,20,24,18,30,26,14,22,28,20,16,24,30,18,26];
+  heights.forEach(h => {
+    const b = document.createElement('div');
+    b.className = 'vo-bar';
+    b.style.height = h + 'px';
+    b.style.opacity = 0.3 + (h/32)*0.5;
+    wv.appendChild(b);
+  });
+}
+
+async function generateVoiceover() {
+  const text = document.getElementById('voText').value.trim();
+  if (!text) return;
+  if (text.length > 5000) { alert('Text too long (max 5000 chars)'); return; }
+
+  const btn = document.getElementById('generateBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i>Generating…';
+  document.getElementById('voPlayerWrap').style.display = 'none';
+
+  try {
+    const formData = new FormData();
+    formData.append('text', text);
+    formData.append('voice', currentVoice);
+
+    const resp = await fetch(API_URL + '/voiceover', { method: 'POST', body: formData });
+    if (!resp.ok) throw new Error('Server error ' + resp.status);
+    const data = await resp.json();
+    if (data.status !== 'done') throw new Error('No audio returned');
+
+    voUrl = data.url;
+    voAudio = new Audio(voUrl);
+    voAudio.onended = () => {
+      document.getElementById('voPlayIcon').className = 'ti ti-player-play';
+    };
+
+    buildWaveform();
+    document.getElementById('voStatusBadge').textContent = 'READY';
+    document.getElementById('voStatusBadge').className = 'vo-status ready';
+    document.getElementById('voPlayerWrap').style.display = 'block';
+  } catch(e) {
+    document.getElementById('voStatusBadge').textContent = 'ERROR';
+    document.getElementById('voStatusBadge').className = 'vo-status error';
+    document.getElementById('voPlayerWrap').style.display = 'block';
+    console.error(e);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="ti ti-sparkles"></i>Generate';
+}
+
+function togglePlay() {
+  if (!voAudio) return;
+  if (voAudio.paused) {
+    voAudio.play();
+    document.getElementById('voPlayIcon').className = 'ti ti-player-pause';
+  } else {
+    voAudio.pause();
+    document.getElementById('voPlayIcon').className = 'ti ti-player-play';
+  }
+}
+
+function downloadVoiceover() {
+  if (!voUrl) return;
+  const a = document.createElement('a');
+  a.href = voUrl;
+  a.target = '_blank';
+  a.download = 'voiceover.mp3';
   document.body.appendChild(a);
   a.click();
   a.remove();
