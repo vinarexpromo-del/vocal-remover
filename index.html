@@ -945,8 +945,13 @@ function finishAll() {
 
 
 function downloadFile(url, filename) {
-  // Supabase serves audio/mpeg — browser downloads it directly via location assign
-  window.location.href = url;
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 }
 
 function closePopup() {
