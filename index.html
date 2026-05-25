@@ -2065,12 +2065,31 @@ window.addEventListener('DOMContentLoaded', () => {
 async function loadTrackBySlug(slug) {
   const query = slug.replace(/-/g, ' ');
   try {
-    const resp = await fetch(
-      SUPABASE_URL + '/rest/v1/tracks?select=*&limit=1&or=(title.ilike.*' + encodeURIComponent(query) + '*,artist.ilike.*' + encodeURIComponent(query) + '*)',
-      { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY } }
+    // Try full slug as title first, then combined search
+    const headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY };
+    
+    // Search by title only first (most accurate)
+    let resp = await fetch(
+      SUPABASE_URL + '/rest/v1/tracks?select=*&limit=1&title=ilike.*' + encodeURIComponent(query) + '*',
+      { headers }
     );
-    const tracks = await resp.json();
-    if (tracks.length) openTrackPage(tracks[0]);
+    let tracks = await resp.json();
+    
+    // If not found, try combined search
+    if (!tracks.length) {
+      resp = await fetch(
+        SUPABASE_URL + '/rest/v1/tracks?select=*&limit=1&or=(title.ilike.*' + encodeURIComponent(query) + '*,artist.ilike.*' + encodeURIComponent(query) + '*)',
+        { headers }
+      );
+      tracks = await resp.json();
+    }
+    
+    if (tracks.length) {
+      openTrackPage(tracks[0]);
+    } else {
+      // Show not found — redirect to home with search
+      document.title = 'Track not found — SPLITR';
+    }
   } catch(e) { console.error(e); }
 }
 
