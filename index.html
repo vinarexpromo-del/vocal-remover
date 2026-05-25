@@ -843,6 +843,44 @@ transition:all 0.2s;
   .track-page-title{font-size:28px}
   .track-page-cta{flex-direction:column}
 }
+
+/* LEGAL MODALS */
+.legal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.8);
+  backdrop-filter:blur(6px);z-index:300;
+  display:none;align-items:flex-start;justify-content:center;
+  overflow-y:auto;padding:40px 20px;
+}
+.legal-overlay.open{display:flex}
+.legal-modal{
+  background:var(--bg2);border:0.5px solid var(--border2);
+  border-radius:20px;padding:48px;
+  max-width:720px;width:100%;
+  position:relative;margin:auto;
+}
+.legal-close{
+  position:absolute;top:20px;right:20px;
+  background:none;border:none;color:var(--text3);
+  font-size:20px;cursor:pointer;transition:color 0.2s;
+}
+.legal-close:hover{color:var(--text)}
+.legal-title{
+  font-size:28px;font-weight:300;margin-bottom:8px;
+}
+.legal-date{font-size:12px;color:var(--text3);margin-bottom:32px;font-family:'Space Mono',monospace}
+.legal-modal h2{font-size:15px;font-weight:500;margin:24px 0 8px;color:var(--text)}
+.legal-modal p{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px}
+.legal-modal ul{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px;padding-left:20px}
+.legal-modal ul li{margin-bottom:4px}
+.legal-modal a{color:var(--lime);text-decoration:none}
+.legal-modal a:hover{text-decoration:underline}
+.api-code{
+  background:var(--bg3);border:0.5px solid var(--border);
+  border-radius:8px;padding:16px;
+  font-family:'Space Mono',monospace;font-size:12px;
+  color:var(--lime);margin:12px 0;overflow-x:auto;
+  white-space:pre;
+}
 /* RESPONSIVE */
 @media(max-width:720px){
 nav{padding:16px 20px}
@@ -1438,9 +1476,9 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
     </div>
   </div>
   <div class="footer-links">
-    <a href="#">Privacy</a>
-    <a href="#">Terms</a>
-    <a href="#">API</a>
+    <a href="#" onclick="openLegal('privacy');return false;">Privacy</a>
+    <a href="#" onclick="openLegal('terms');return false;">Terms</a>
+    <a href="#" onclick="openLegal('api');return false;">API</a>
     <a href="https://edm-ghost-production.com" target="_blank">Ghost Production ↗</a>
   </div>
 </footer>
@@ -2104,6 +2142,17 @@ async function loadTrackBySlug(slug) {
   } catch(e) { console.error(e); }
 }
 
+
+function openLegal(type) {
+  document.getElementById('modal-' + type).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLegal() {
+  document.querySelectorAll('.legal-overlay').forEach(m => m.classList.remove('open'));
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLegal(); });
+
 function closePopup() {
   document.getElementById('popup').classList.remove('open');
 }
@@ -2112,5 +2161,128 @@ document.getElementById('popup').addEventListener('click', function(e) {
   if (e.target === this) closePopup();
 });
 </script>
+
+<!-- PRIVACY MODAL -->
+<div class="legal-overlay" id="modal-privacy" onclick="if(event.target===this)closeLegal()">
+  <div class="legal-modal">
+    <button class="legal-close" onclick="closeLegal()"><i class="ti ti-x"></i></button>
+    <div class="legal-title">Privacy Policy</div>
+    <div class="legal-date">Last updated: May 2025</div>
+
+    <h2>1. Information We Collect</h2>
+    <p>SPLITR is designed with privacy in mind. We collect minimal data necessary to provide our service:</p>
+    <ul>
+      <li><strong>Audio files</strong> — uploaded for processing. Files are temporarily stored during processing and automatically deleted after your download is ready.</li>
+      <li><strong>Usage analytics</strong> — anonymous page views and feature usage via Google Analytics. No personal data is collected.</li>
+      <li><strong>No account required</strong> — we do not collect names, emails, or any personally identifiable information.</li>
+    </ul>
+
+    <h2>2. How We Use Your Data</h2>
+    <p>Your uploaded audio files are used solely to process your request (vocal removal, stem separation, MIDI extraction, etc.). We do not use your files for training AI models, sharing with third parties, or any other purpose.</p>
+
+    <h2>3. Data Storage & Retention</h2>
+    <p>Processed files are temporarily stored on Supabase (EU-West region) and automatically deleted within 24 hours. We do not retain copies of your original uploads or processed outputs.</p>
+
+    <h2>4. Third-Party Services</h2>
+    <ul>
+      <li><strong>Modal</strong> — GPU compute for AI processing</li>
+      <li><strong>Supabase</strong> — temporary file storage</li>
+      <li><strong>Google Analytics</strong> — anonymous usage statistics</li>
+      <li><strong>Vercel</strong> — website hosting</li>
+    </ul>
+
+    <h2>5. Cookies</h2>
+    <p>We use only essential cookies required for Google Analytics. We do not use advertising or tracking cookies.</p>
+
+    <h2>6. Your Rights</h2>
+    <p>Since we don't collect personal data, there is nothing to delete or export. If you have concerns, contact us at <a href="mailto:hello@spltr.pro">hello@spltr.pro</a>.</p>
+
+    <h2>7. Changes</h2>
+    <p>We may update this policy occasionally. Continued use of SPLITR constitutes acceptance of the updated policy.</p>
+  </div>
+</div>
+
+<!-- TERMS MODAL -->
+<div class="legal-overlay" id="modal-terms" onclick="if(event.target===this)closeLegal()">
+  <div class="legal-modal">
+    <button class="legal-close" onclick="closeLegal()"><i class="ti ti-x"></i></button>
+    <div class="legal-title">Terms of Service</div>
+    <div class="legal-date">Last updated: May 2025</div>
+
+    <h2>1. Acceptance</h2>
+    <p>By using SPLITR ("the Service"), you agree to these Terms. If you disagree, please do not use the Service.</p>
+
+    <h2>2. Description of Service</h2>
+    <p>SPLITR provides free AI-powered audio processing tools including vocal removal, stem separation, BPM & key detection, MIDI extraction, AI voiceover generation, and a track database. The service is provided "as is" without warranties.</p>
+
+    <h2>3. Acceptable Use</h2>
+    <p>You agree to use SPLITR only for lawful purposes. You must not:</p>
+    <ul>
+      <li>Upload files you do not have the right to process</li>
+      <li>Use the service to infringe on copyright or intellectual property rights</li>
+      <li>Attempt to overload, hack, or reverse-engineer the service</li>
+      <li>Use automated scripts to make excessive requests</li>
+    </ul>
+
+    <h2>4. Copyright & Intellectual Property</h2>
+    <p>SPLITR provides technical audio processing tools. The copyright of processed audio remains with the original rights holders. Users are solely responsible for ensuring they have the legal right to process any audio they upload. SPLITR does not claim ownership of any uploaded or processed content.</p>
+
+    <h2>5. Disclaimer of Warranties</h2>
+    <p>The Service is provided "as is" without warranty of any kind. We do not guarantee uninterrupted service, accuracy of results, or fitness for any particular purpose.</p>
+
+    <h2>6. Limitation of Liability</h2>
+    <p>SPLITR shall not be liable for any indirect, incidental, or consequential damages arising from your use of the service.</p>
+
+    <h2>7. Changes to Service</h2>
+    <p>We reserve the right to modify, suspend, or discontinue the Service at any time without notice.</p>
+
+    <h2>8. Contact</h2>
+    <p>For questions: <a href="mailto:hello@spltr.pro">hello@spltr.pro</a></p>
+  </div>
+</div>
+
+<!-- API MODAL -->
+<div class="legal-overlay" id="modal-api" onclick="if(event.target===this)closeLegal()">
+  <div class="legal-modal">
+    <button class="legal-close" onclick="closeLegal()"><i class="ti ti-x"></i></button>
+    <div class="legal-title">API</div>
+    <div class="legal-date">Base URL: https://vinarexpromo-del--vocal-remover-api.modal.run</div>
+
+    <h2>Vocal Removal / Stem Separation</h2>
+    <p>POST <code style="color:var(--lime)">/</code> — Upload an audio file and choose processing mode.</p>
+    <div class="api-code">curl -X POST "https://vinarexpromo-del--vocal-remover-api.modal.run/" \
+  -F "file=@track.mp3" \
+  -F "mode=vocals"
+
+# mode options: vocals | instrumental | stems</div>
+    <p>Returns: <code style="color:var(--lime)">{"status": "done", "files": {"vocals": "url..."}}</code></p>
+
+    <h2>BPM & Key Analysis</h2>
+    <p>POST <code style="color:var(--lime)">/analyze</code> — Analyze BPM, key, Camelot and energy of a track.</p>
+    <div class="api-code">curl -X POST "https://vinarexpromo-del--vocal-remover-api.modal.run/analyze" \
+  -F "file=@track.mp3"</div>
+    <p>Returns: <code style="color:var(--lime)">{"status": "done", "bpm": 128.0, "key": "A minor", "camelot": "8A", "energy": 75}</code></p>
+
+    <h2>MIDI Extraction</h2>
+    <p>POST <code style="color:var(--lime)">/midi</code> — Convert audio to MIDI file.</p>
+    <div class="api-code">curl -X POST "https://vinarexpromo-del--vocal-remover-api.modal.run/midi" \
+  -F "file=@track.mp3"</div>
+    <p>Returns: <code style="color:var(--lime)">{"status": "done", "url": "...", "filename": "track.mid"}</code></p>
+
+    <h2>AI Voiceover</h2>
+    <p>POST <code style="color:var(--lime)">/voiceover</code> — Generate AI voiceover from text.</p>
+    <div class="api-code">curl -X POST "https://vinarexpromo-del--vocal-remover-api.modal.run/voiceover" \
+  -F "text=Hello world" \
+  -F "voice=sarah"
+
+# voice options: sarah | marcus | elena | james | aria | echo</div>
+    <p>Returns: <code style="color:var(--lime)">{"status": "done", "url": "..."}</code></p>
+
+    <h2>Rate Limits</h2>
+    <p>The API is currently free and open. Please be respectful — limit requests to 10 per minute. For higher limits or commercial use, contact <a href="mailto:hello@spltr.pro">hello@spltr.pro</a>.</p>
+  </div>
+</div>
+
+
 </body>
 </html>
