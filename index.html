@@ -1536,14 +1536,21 @@ function finishAll() {
 }
 
 
-function downloadFile(url, filename) {
-  const a = document.createElement('a');
-  a.href = url;
-  a.target = '_blank';
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+async function downloadFile(url, filename) {
+  try {
+    const proxyUrl = API_URL + '/download?url=' + encodeURIComponent(url) + '&filename=' + encodeURIComponent(filename);
+    const resp = await fetch(proxyUrl);
+    if (!resp.ok) throw new Error('proxy error');
+    const blob = await resp.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  } catch(e) {
+    window.open(url, '_blank');
+  }
 }
 
 
