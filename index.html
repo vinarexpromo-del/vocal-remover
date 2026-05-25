@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPLITR — Free AI Audio Toolkit</title>
+<title>SPLITR — Free AI Audio Tools: Vocal Remover, BPM Detector, MIDI Extractor</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
@@ -665,6 +666,78 @@ transition:all 0.2s;
 .btn-analyze:hover{background:#d4ff33}
 .btn-analyze i{font-size:13px}
 @media(max-width:720px){.analyzer-results{grid-template-columns:repeat(2,1fr)}}
+
+/* MIDI */
+.midi-section{display:none;padding:24px}
+.midi-section.active{display:block}
+.midi-drop{
+  border:1.5px dashed var(--border2);border-radius:14px;
+  padding:48px;text-align:center;cursor:pointer;transition:all 0.25s;
+  margin-bottom:20px;
+}
+.midi-drop:hover,.midi-drop.over{border-color:var(--lime-border);background:var(--lime-dim)}
+.midi-drop-icon{
+  width:52px;height:52px;border-radius:12px;
+  background:rgba(168,139,250,0.12);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+}
+.midi-drop-icon i{font-size:24px;color:#a78bfa}
+.midi-drop-title{font-size:16px;font-weight:500;margin-bottom:6px}
+.midi-drop-hint{font-size:13px;color:var(--text2);margin-bottom:6px}
+.midi-drop-hint2{font-size:11px;color:var(--text3)}
+.midi-filename{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg3);border:0.5px solid var(--border);
+  border-radius:10px;padding:12px 16px;margin-bottom:16px;
+}
+.midi-filename i{font-size:16px;color:#a78bfa}
+.midi-filename span{font-size:13px;color:var(--text);flex:1}
+.btn-midi{
+  background:#a78bfa;border:none;border-radius:8px;
+  padding:8px 16px;color:#09090e;font-size:12px;font-weight:500;
+  font-family:'DM Sans',sans-serif;cursor:pointer;
+  display:flex;align-items:center;gap:6px;transition:all 0.2s;flex-shrink:0;
+}
+.btn-midi:hover{background:#c4b0fc}
+.btn-midi:disabled{opacity:0.5;cursor:not-allowed}
+.midi-result{
+  background:var(--bg3);
+  border:0.5px solid rgba(168,139,250,0.3);
+  border-radius:14px;padding:24px;
+  display:flex;align-items:center;gap:16px;
+}
+.midi-result-icon{
+  width:48px;height:48px;border-radius:12px;
+  background:rgba(168,139,250,0.12);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.midi-result-icon i{font-size:22px;color:#a78bfa}
+.midi-result-info{flex:1}
+.midi-result-title{font-size:14px;font-weight:500;margin-bottom:4px}
+.midi-result-sub{font-size:12px;color:var(--text2)}
+.btn-midi-dl{
+  background:var(--green-dim);
+  border:0.5px solid rgba(79,255,176,0.25);
+  border-radius:7px;padding:8px 16px;
+  color:var(--green);font-size:12px;font-weight:500;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;display:flex;align-items:center;gap:6px;
+  transition:all 0.2s;flex-shrink:0;
+}
+.btn-midi-dl:hover{background:rgba(79,255,176,0.2)}
+.midi-loading{text-align:center;padding:40px;display:none}
+.midi-loading i{font-size:32px;color:#a78bfa;animation:spin 1s linear infinite}
+.midi-loading p{font-size:13px;color:var(--text2);margin-top:12px}
+.midi-tips{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;
+}
+.midi-tip{
+  background:var(--bg3);border:0.5px solid var(--border);
+  border-radius:10px;padding:14px;
+}
+.midi-tip-title{font-size:12px;font-weight:500;margin-bottom:4px;color:var(--text)}
+.midi-tip-desc{font-size:11px;color:var(--text2);line-height:1.5}
+@media(max-width:720px){.midi-tips{grid-template-columns:1fr}}
 /* RESPONSIVE */
 @media(max-width:720px){
 nav{padding:16px 20px}
@@ -700,9 +773,9 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
 <section class="hero">
   <div class="hero-badge"><span class="dot"></span>Free · No sign-up required</div>
   <h1>Your AI<br>audio <em>toolkit.</em></h1>
-  <p class="hero-sub">AI-powered tools for DJs, producers, and content creators. Split any track or generate voiceovers — free, no sign-up.</p>
+  <p class="hero-sub">AI-powered tools for DJs, producers, and content creators. Remove vocals, extract stems, generate voiceovers, detect BPM & key, or convert audio to MIDI — free, no sign-up.</p>
   <div class="hero-stats">
-    <div><div class="stat-num">2.4M+</div><div class="stat-label">TRACKS PROCESSED</div></div>
+    <div><div class="stat-num">5</div><div class="stat-label">FREE AI TOOLS</div></div>
     <div><div class="stat-num">&lt;30s</div><div class="stat-label">AVG. PROCESSING</div></div>
     <div><div class="stat-num">320kbps</div><div class="stat-label">OUTPUT QUALITY</div></div>
   </div>
@@ -726,6 +799,9 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
       </button>
       <button class="mode-btn" onclick="setMode(this,'analyzer')" data-mode="analyzer">
         <i class="ti ti-music-search"></i>BPM & Key
+      </button>
+      <button class="mode-btn" onclick="setMode(this,'midi')" data-mode="midi">
+        <i class="ti ti-piano"></i>MIDI Extract
       </button>
     </div>
 
@@ -877,6 +953,61 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
       </div>
     </div>
 
+    <!-- MIDI SECTION -->
+    <div class="midi-section" id="midiSection">
+      <div class="midi-drop" id="midiDrop"
+        ondragover="midiEv(event,'over')"
+        ondragleave="midiEv(event,'leave')"
+        ondrop="midiEv(event,'drop')"
+        onclick="document.getElementById('midiFileInput').click()">
+        <div class="midi-drop-icon"><i class="ti ti-piano"></i></div>
+        <div class="midi-drop-title">Drop a track to extract MIDI</div>
+        <div class="midi-drop-hint">Converts audio to MIDI using AI pitch detection</div>
+        <div class="midi-drop-hint2">Works best with melodic instruments and isolated vocals/instruments</div>
+      </div>
+      <input type="file" id="midiFileInput" accept=".mp3,.wav,.flac,.aac,.ogg,.m4a" style="display:none" onchange="midiFileSelected(this.files[0])">
+
+      <div id="midiFilename" style="display:none" class="midi-filename">
+        <i class="ti ti-file-music"></i>
+        <span id="midiFilenameTxt"></span>
+        <button class="btn-midi" id="midiBtn" onclick="runMidi()">
+          <i class="ti ti-wand"></i>Extract MIDI
+        </button>
+      </div>
+
+      <div class="midi-loading" id="midiLoading">
+        <i class="ti ti-loader-2"></i>
+        <p>Extracting MIDI — this may take a minute…</p>
+      </div>
+
+      <div id="midiResult" style="display:none">
+        <div class="midi-result">
+          <div class="midi-result-icon"><i class="ti ti-file-music"></i></div>
+          <div class="midi-result-info">
+            <div class="midi-result-title" id="midiResultName">output.mid</div>
+            <div class="midi-result-sub">MIDI file ready · Open in FL Studio, Ableton, Logic, GarageBand</div>
+          </div>
+          <button class="btn-midi-dl" onclick="downloadMidi()">
+            <i class="ti ti-download"></i>Download .mid
+          </button>
+        </div>
+        <div class="midi-tips">
+          <div class="midi-tip">
+            <div class="midi-tip-title">💡 Best results</div>
+            <div class="midi-tip-desc">Use isolated stems — run Vocal Remover first to get clean instruments before extracting MIDI.</div>
+          </div>
+          <div class="midi-tip">
+            <div class="midi-tip-title">🎹 Open in DAW</div>
+            <div class="midi-tip-desc">Import the .mid file into FL Studio, Ableton, Logic or any DAW to edit notes and apply any VST.</div>
+          </div>
+          <div class="midi-tip">
+            <div class="midi-tip-title">🎵 Powered by</div>
+            <div class="midi-tip-desc">Basic Pitch by Spotify — open-source neural network for polyphonic pitch detection.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- PROMO BANNER (shown after processing) -->
     <div class="promo-banner" id="promoBanner">
       <div class="promo-text">
@@ -892,7 +1023,7 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
 <!-- HOW IT WORKS -->
 <section class="section" id="how">
   <div class="section-label">HOW IT WORKS</div>
-  <h2 class="section-title">Four tools. Zero complexity.</h2>
+  <h2 class="section-title">Five tools. Zero complexity.</h2>
   <div class="steps" style="grid-template-columns:repeat(4,1fr)">
     <div class="step">
       <div class="step-num">01</div>
@@ -950,6 +1081,11 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
       <div class="usecase-icon" style="background:var(--blue-dim)"><i class="ti ti-microphone" style="color:var(--blue)"></i></div>
       <div class="usecase-title">Podcasters & Creators</div>
       <div class="usecase-desc">Generate professional AI voiceovers for intros, outros, ads, and narration. Six voices, instant output, no recording gear needed.</div>
+    </div>
+    <div class="usecase">
+      <div class="usecase-icon" style="background:rgba(168,139,250,0.12)"><i class="ti ti-piano" style="color:#a78bfa"></i></div>
+      <div class="usecase-title">Music Producers</div>
+      <div class="usecase-desc">Extract MIDI from any audio and import it directly into your DAW. Repitch, rearrange, and apply any VST to the extracted notes.</div>
     </div>
   </div>
 </section>
@@ -1085,6 +1221,22 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
       <p class="faq-a">Yes, completely free. No account, no limits, no watermarks. Just type your text and generate. Works great for podcast intros, YouTube narration, track drops, and any content that needs a professional voice.</p>
     </details>
 
+    <details class="faq-item">
+      <summary class="faq-q">
+        How does the MIDI extractor work?
+        <span class="faq-icon"><i class="ti ti-plus"></i></span>
+      </summary>
+      <p class="faq-a">Upload any audio file and SPLITR uses Basic Pitch by Spotify — an open-source neural network — to detect pitches and convert them into a standard MIDI file. Works best on isolated instruments or vocals. Download the .mid file and open it in any DAW.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary class="faq-q">
+        What DAWs support the MIDI files from SPLITR?
+        <span class="faq-icon"><i class="ti ti-plus"></i></span>
+      </summary>
+      <p class="faq-a">Any DAW that supports standard MIDI files — FL Studio, Ableton Live, Logic Pro, GarageBand, Cubase, Studio One, and more. Just import the .mid file and you can edit every note, change the instrument, or apply any VST plugin.</p>
+    </details>
+
   </div>
 </section>
 
@@ -1141,10 +1293,18 @@ function setMode(btn, mode) {
     document.getElementById('queueSection').style.display = 'none';
     document.getElementById('voSection').classList.remove('active');
     document.getElementById('analyzerSection').classList.add('active');
+    document.getElementById('midiSection').classList.remove('active');
+  } else if (mode === 'midi') {
+    document.getElementById('dropZone').style.display = 'none';
+    document.getElementById('queueSection').style.display = 'none';
+    document.getElementById('voSection').classList.remove('active');
+    document.getElementById('analyzerSection').classList.remove('active');
+    document.getElementById('midiSection').classList.add('active');
   } else {
     document.getElementById('dropZone').style.display = '';
     document.getElementById('voSection').classList.remove('active');
     document.getElementById('analyzerSection').classList.remove('active');
+    document.getElementById('midiSection').classList.remove('active');
     renderQueue();
   }
 }
@@ -1512,6 +1672,62 @@ async function runAnalyzer() {
 
   document.getElementById('analyzerLoading').style.display = 'none';
   document.getElementById('analyzerBtn').disabled = false;
+}
+
+
+let midiFile = null;
+let midiUrl = null;
+let midiFilenameStr = 'output.mid';
+
+function midiEv(e, type) {
+  e.preventDefault();
+  const z = document.getElementById('midiDrop');
+  if (type === 'over') z.classList.add('over');
+  else if (type === 'leave') z.classList.remove('over');
+  else if (type === 'drop') {
+    z.classList.remove('over');
+    if (e.dataTransfer.files[0]) midiFileSelected(e.dataTransfer.files[0]);
+  }
+}
+
+function midiFileSelected(file) {
+  midiFile = file;
+  document.getElementById('midiFilenameTxt').textContent = file.name;
+  document.getElementById('midiFilename').style.display = 'flex';
+  document.getElementById('midiResult').style.display = 'none';
+  document.getElementById('midiLoading').style.display = 'none';
+}
+
+async function runMidi() {
+  if (!midiFile) return;
+  document.getElementById('midiLoading').style.display = 'block';
+  document.getElementById('midiResult').style.display = 'none';
+  document.getElementById('midiBtn').disabled = true;
+
+  try {
+    const formData = new FormData();
+    formData.append('file', midiFile, midiFile.name);
+    const resp = await fetch(API_URL + '/midi', { method: 'POST', body: formData });
+    if (!resp.ok) throw new Error('Server error ' + resp.status);
+    const data = await resp.json();
+    if (data.status !== 'done') throw new Error('No MIDI returned');
+
+    midiUrl = data.url;
+    midiFilenameStr = data.filename || 'output.mid';
+    document.getElementById('midiResultName').textContent = midiFilenameStr;
+    document.getElementById('midiResult').style.display = 'block';
+  } catch(e) {
+    alert('MIDI extraction failed: ' + e.message);
+    console.error(e);
+  }
+
+  document.getElementById('midiLoading').style.display = 'none';
+  document.getElementById('midiBtn').disabled = false;
+}
+
+function downloadMidi() {
+  if (!midiUrl) return;
+  window.location.href = midiUrl;
 }
 
 function closePopup() {
