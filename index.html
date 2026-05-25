@@ -2063,33 +2063,39 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 async function loadTrackBySlug(slug) {
-  const query = slug.replace(/-/g, ' ');
+  const headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY };
+  const parts = slug.split('-');
+  
   try {
-    // Try full slug as title first, then combined search
-    const headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY };
-    
-    // Search by title only first (most accurate)
-    let resp = await fetch(
-      SUPABASE_URL + '/rest/v1/tracks?select=*&limit=1&title=ilike.*' + encodeURIComponent(query) + '*',
-      { headers }
-    );
-    let tracks = await resp.json();
-    
-    // If not found, try combined search
-    if (!tracks.length) {
-      resp = await fetch(
-        SUPABASE_URL + '/rest/v1/tracks?select=*&limit=1&or=(title.ilike.*' + encodeURIComponent(query) + '*,artist.ilike.*' + encodeURIComponent(query) + '*)',
+    // Try progressively shorter title queries (drop words from front = artist part)
+    for (let i = 1; i <= parts.length; i++) {
+      const titleQuery = parts.slice(i).join(' ');
+      const artistQuery = parts.slice(0, i).join(' ');
+      if (!titleQuery) continue;
+      
+      const resp = await fetch(
+        SUPABASE_URL + '/rest/v1/tracks?select=*&limit=5&title=ilike.*' + encodeURIComponent(titleQuery) + '*',
         { headers }
       );
-      tracks = await resp.json();
+      const tracks = await resp.json();
+      if (tracks.length) {
+        // Pick best match — prefer one where artist also matches
+        const best = tracks.find(t => t.artist.toLowerCase().includes(artistQuery)) || tracks[0];
+        openTrackPage(best);
+        return;
+      }
     }
     
-    if (tracks.length) {
-      openTrackPage(tracks[0]);
-    } else {
-      // Show not found — redirect to home with search
-      document.title = 'Track not found — SPLITR';
-    }
+    // Last resort: full slug as combined search
+    const fullQuery = slug.replace(/-/g, ' ');
+    const resp = await fetch(
+      SUPABASE_URL + '/rest/v1/tracks?select=*&limit=1&or=(title.ilike.*' + encodeURIComponent(fullQuery) + '*,artist.ilike.*' + encodeURIComponent(fullQuery) + '*)',
+      { headers }
+    );
+    const tracks = await resp.json();
+    if (tracks.length) openTrackPage(tracks[0]);
+    else document.title = 'Track not found — SPLITR';
+    
   } catch(e) { console.error(e); }
 }
 
