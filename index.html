@@ -1374,12 +1374,12 @@ function renderQueue() {
       const baseName = t.file.name.replace(/\.[^.]+$/, '');
       if (entries.length === 1) {
         const [stemName, url] = entries[0];
-        const fname = baseName + '_' + stemName + '.mp3';
+        const fname = 'spltr.pro_' + baseName + '_' + stemName + '.mp3';
         actionEl = `<button class="btn-download" onclick="downloadFile('${url}','${fname}')"><i class="ti ti-download"></i>Download</button>`;
       } else {
         // Multiple stems (4-stem mode)
         const btns = entries.map(([stemName, url]) => {
-          const fname = baseName + '_' + stemName + '.mp3';
+          const fname = 'spltr.pro_' + baseName + '_' + stemName + '.mp3';
           return `<button class="btn-download" onclick="downloadFile('${url}','${fname}')"><i class="ti ti-download"></i>${stemName}</button>`;
         }).join('');
         actionEl = `<div class="btn-download-multi">${btns}</div>`;
@@ -1632,7 +1632,7 @@ function downloadVoiceover() {
   const a = document.createElement('a');
   a.href = voUrl;
   a.target = '_blank';
-  a.download = 'voiceover.mp3';
+  a.download = 'spltr.pro_voiceover.mp3';
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -1743,7 +1743,13 @@ async function runMidi() {
 
 function downloadMidi() {
   if (!midiUrl) return;
-  window.location.href = midiUrl;
+  const a = document.createElement('a');
+  a.href = midiUrl;
+  a.target = '_blank';
+  a.download = 'spltr.pro_' + midiFilenameStr;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 }
 
 function closePopup() {
