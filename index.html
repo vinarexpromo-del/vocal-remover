@@ -1476,6 +1476,7 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
     </div>
   </div>
   <div class="footer-links">
+    <a href="#" onclick="openLegal('contact');return false;">Contact</a>
     <a href="#" onclick="openLegal('privacy');return false;">Privacy</a>
     <a href="#" onclick="openLegal('terms');return false;">Terms</a>
     <a href="#" onclick="openLegal('api');return false;">API</a>
@@ -2319,5 +2320,33 @@ document.getElementById('popup').addEventListener('click', function(e) {
   </div>
 </div>
 
+
+<!-- CONTACT MODAL -->
+<div class="legal-overlay" id="modal-contact" onclick="if(event.target===this)closeLegal()">
+  <div class="legal-modal" style="max-width:520px">
+    <button class="legal-close" onclick="closeLegal()"><i class="ti ti-x"></i></button>
+    <div class="legal-title">Contact Us</div>
+    <div class="legal-date">We usually reply within 24 hours</div>
+    <h2>General Inquiries</h2>
+    <p>For questions, feedback, or bug reports: <a href="mailto:hello@spltr.pro">hello@spltr.pro</a></p>
+    <h2>Business & Partnerships</h2>
+    <p>For commercial use, API access, or partnership opportunities: <a href="mailto:hello@spltr.pro">hello@spltr.pro</a></p>
+    <h2>Feature Requests</h2>
+    <p>Have an idea? Find us on:</p>
+    <ul>
+      <li><a href="https://www.producthunt.com/products/splitr-2" target="_blank">Product Hunt</a></li>
+      <li><a href="https://reddit.com/r/edmproduction" target="_blank">Reddit r/edmproduction</a></li>
+    </ul>
+    <div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:20px;margin-top:24px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div>
+        <div style="font-size:14px;font-weight:500;margin-bottom:4px">Send us a message</div>
+        <div style="font-size:12px;color:var(--text2)">hello@spltr.pro</div>
+      </div>
+      <a href="mailto:hello@spltr.pro" style="background:var(--lime);border:none;border-radius:8px;padding:10px 20px;color:#09090e;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:7px">
+        <i class="ti ti-mail"></i>Email us
+      </a>
+    </div>
+  </div>
+</div>
 </body>
 </html>
