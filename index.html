@@ -1987,16 +1987,22 @@ async function dbFetch() {
       return;
     }
         window._dbTracks = tracks;
-    document.getElementById('dbResults').innerHTML = tracks.map((t, i) =>
-      '<div class="db-track" onclick="openTrackPage(window._dbTracks[' + i + '])">' +
-      '<div><div class="db-track-name">' + escHtml(t.title) + '</div><div class="db-track-artist">' + escHtml(t.artist.split(";")[0]) + '</div></div>' +
-      '<div class="db-track-stats">' +
-      '<div class="db-stat"><div class="db-stat-val">' + (t.bpm||'—') + '</div><div class="db-stat-label">BPM</div></div>' +
-      '<div class="db-stat"><div class="db-stat-val db-stat-key-val">' + escHtml(t.key||'—') + '</div><div class="db-stat-label">KEY</div></div>' +
-      '<div class="db-camelot">' + escHtml(t.camelot||'—') + '</div>' +
-      '<div class="db-stat"><div class="db-stat-val">' + (t.energy||'—') + '</div><div class="db-stat-label">ENERGY</div></div>' +
-      '</div></div>'
-    ).join('');
+    document.getElementById('dbResults').innerHTML = tracks.map(function(t, i) {
+      return [
+        '<div class="db-track" onclick="openTrackPage(window._dbTracks[' + i + '])">',
+        '<div>',
+          '<div class="db-track-name">' + escHtml(t.title) + '</div>',
+          '<div class="db-track-artist">' + escHtml(t.artist.split(';')[0]) + '</div>',
+        '</div>',
+        '<div class="db-track-stats">',
+          '<div class="db-stat"><div class="db-stat-val">' + (t.bpm || '&mdash;') + '</div><div class="db-stat-label">BPM</div></div>',
+          '<div class="db-stat"><div class="db-stat-val db-stat-key-val">' + escHtml(t.key || '&mdash;') + '</div><div class="db-stat-label">KEY</div></div>',
+          '<div class="db-camelot">' + escHtml(t.camelot || '&mdash;') + '</div>',
+          '<div class="db-stat"><div class="db-stat-val">' + (t.energy || '&mdash;') + '</div><div class="db-stat-label">ENERGY</div></div>',
+        '</div>',
+        '</div>'
+      ].join('');
+    }).join('');
     const totalPages = Math.ceil(total / DB_PAGE_SIZE);
     if (totalPages > 1) {
       document.getElementById('dbPagination').style.display = 'flex';
