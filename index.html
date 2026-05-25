@@ -754,6 +754,95 @@ transition:all 0.2s;
 .midi-tip-title{font-size:12px;font-weight:500;margin-bottom:4px;color:var(--text)}
 .midi-tip-desc{font-size:11px;color:var(--text2);line-height:1.5}
 @media(max-width:720px){.midi-tips{grid-template-columns:1fr}}
+
+/* TRACK DATABASE SEARCH */
+.db-section{max-width:1100px;margin:0 auto;padding:80px 40px}
+.db-search-wrap{position:relative;margin-bottom:24px}
+.db-search-input{
+  width:100%;background:var(--bg2);border:0.5px solid var(--border2);border-radius:12px;
+  padding:16px 56px 16px 20px;color:var(--text);font-size:15px;
+  font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;
+}
+.db-search-input:focus{border-color:var(--lime-border)}
+.db-search-input::placeholder{color:var(--text3)}
+.db-search-icon{position:absolute;right:18px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:18px;pointer-events:none}
+.db-filters{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.db-filter-btn{
+  background:var(--bg3);border:0.5px solid var(--border);border-radius:20px;
+  padding:6px 14px;color:var(--text2);font-size:12px;cursor:pointer;
+  transition:all 0.2s;font-family:'DM Sans',sans-serif;
+}
+.db-filter-btn:hover{border-color:var(--border2);color:var(--text)}
+.db-filter-btn.active{background:var(--lime-dim);border-color:var(--lime-border);color:var(--lime)}
+.db-results{display:flex;flex-direction:column;gap:8px}
+.db-track{
+  background:var(--bg2);border:0.5px solid var(--border);border-radius:12px;
+  padding:14px 18px;display:grid;grid-template-columns:1fr auto;
+  align-items:center;gap:16px;transition:border-color 0.2s;cursor:pointer;
+}
+.db-track:hover{border-color:var(--border2)}
+.db-track-name{font-size:14px;font-weight:500;margin-bottom:3px}
+.db-track-artist{font-size:12px;color:var(--text2)}
+.db-track-stats{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.db-stat{display:flex;flex-direction:column;align-items:center;min-width:56px}
+.db-stat-val{font-size:15px;font-weight:500;color:var(--text);font-family:'Space Mono',monospace}
+.db-stat-key-val{font-size:13px}
+.db-stat-label{font-size:9px;color:var(--text3);letter-spacing:0.06em;margin-top:2px}
+.db-camelot{
+  background:var(--blue-dim);border:0.5px solid rgba(100,180,255,0.2);
+  border-radius:6px;padding:4px 10px;font-size:13px;font-weight:500;
+  color:var(--blue);font-family:'Space Mono',monospace;
+}
+.db-empty{text-align:center;padding:48px;color:var(--text3);font-size:14px}
+.db-loading{text-align:center;padding:48px}
+.db-loading i{font-size:24px;color:var(--lime);animation:spin 1s linear infinite}
+.db-pagination{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:20px}
+.db-page-btn{
+  background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;
+  padding:8px 14px;color:var(--text2);font-size:12px;cursor:pointer;
+  transition:all 0.2s;font-family:'DM Sans',sans-serif;
+}
+.db-page-btn:hover{background:rgba(255,255,255,0.05);color:var(--text)}
+.db-page-btn.active{background:var(--lime-dim);border-color:var(--lime-border);color:var(--lime)}
+.db-page-btn:disabled{opacity:0.3;cursor:not-allowed}
+.db-count{font-size:12px;color:var(--text3);font-family:'Space Mono',monospace}
+/* TRACK PAGE */
+.track-page{display:none;max-width:860px;margin:0 auto;padding:60px 40px}
+.track-page.active{display:block}
+.track-page-back{
+  display:inline-flex;align-items:center;gap:8px;color:var(--text2);font-size:13px;
+  cursor:pointer;margin-bottom:32px;transition:color 0.2s;
+  background:none;border:none;font-family:'DM Sans',sans-serif;
+}
+.track-page-back:hover{color:var(--text)}
+.track-page-artist{font-size:13px;color:var(--lime);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:10px}
+.track-page-title{font-size:42px;font-weight:300;line-height:1.1;margin-bottom:40px}
+.track-page-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px}
+.track-page-stat{background:var(--bg2);border:0.5px solid var(--border2);border-radius:14px;padding:24px;text-align:center}
+.track-page-stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.track-page-stat-icon i{font-size:18px}
+.track-page-stat-label{font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:0.07em;margin-bottom:8px}
+.track-page-stat-val{font-size:32px;font-weight:500;font-family:'Space Mono',monospace}
+.track-page-stat-sub{font-size:12px;color:var(--text2);margin-top:4px}
+.track-page-cta{background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;padding:28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.track-page-cta-title{font-size:16px;font-weight:500;margin-bottom:6px}
+.track-page-cta-sub{font-size:13px;color:var(--text2)}
+.btn-cta-analyze{
+  background:var(--lime);border:none;border-radius:9px;padding:12px 24px;
+  color:#09090e;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;
+  cursor:pointer;white-space:nowrap;transition:all 0.2s;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-cta-analyze:hover{background:#d4ff33}
+@media(max-width:720px){
+  .db-section{padding:56px 20px}
+  .db-track{grid-template-columns:1fr}
+  .db-track-stats{gap:10px}
+  .track-page{padding:40px 20px}
+  .track-page-stats{grid-template-columns:repeat(2,1fr)}
+  .track-page-title{font-size:28px}
+  .track-page-cta{flex-direction:column}
+}
 /* RESPONSIVE */
 @media(max-width:720px){
 nav{padding:16px 20px}
@@ -779,6 +868,7 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
 <nav>
   <a class="logo" href="#">SPLITR_</a>
   <div class="nav-links">
+    <a href="#database">Track Database</a>
     <a href="#how">How it works</a>
     <a href="#usecases">Use cases</a>
     <a href="https://edm-ghost-production.com" target="_blank" class="nav-cta">Need a track? ↗</a>
@@ -1035,6 +1125,85 @@ footer{flex-direction:column;gap:20px;padding:28px 20px;text-align:center}
     </div>
   </div>
 </section>
+
+
+<!-- TRACK DATABASE -->
+<section class="db-section" id="database">
+  <div class="section-label">TRACK DATABASE</div>
+  <h2 class="section-title">52,000+ tracks analyzed.</h2>
+  <p style="font-size:14px;color:var(--text2);margin-bottom:32px;max-width:520px;line-height:1.6">Search any track to instantly get BPM, musical key, Camelot number and energy level — no upload needed.</p>
+  <div class="db-search-wrap">
+    <input class="db-search-input" id="dbSearchInput" type="text"
+      placeholder="Search by track name or artist… e.g. Blinding Lights, Drake"
+      oninput="dbSearch(this.value)" autocomplete="off">
+    <i class="ti ti-search db-search-icon"></i>
+  </div>
+  <div class="db-filters">
+    <span style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:0.05em;align-self:center">FILTER:</span>
+    <button class="db-filter-btn active" onclick="dbSetGenre(this,'')">All</button>
+    <button class="db-filter-btn" onclick="dbSetGenre(this,'pop')">Pop</button>
+    <button class="db-filter-btn" onclick="dbSetGenre(this,'hip-hop')">Hip-Hop</button>
+    <button class="db-filter-btn" onclick="dbSetGenre(this,'edm')">EDM</button>
+    <button class="db-filter-btn" onclick="dbSetGenre(this,'rock')">Rock</button>
+    <button class="db-filter-btn" onclick="dbSetGenre(this,'r-n-b')">R&B</button>
+    <button class="db-filter-btn" onclick="dbSetGenre(this,'latin')">Latin</button>
+    <button class="db-filter-btn" onclick="dbSetGenre(this,'electronic')">Electronic</button>
+    <button class="db-filter-btn" onclick="dbSetGenre(this,'dance')">Dance</button>
+  </div>
+  <div id="dbLoading" style="display:none" class="db-loading">
+    <i class="ti ti-loader-2" style="display:inline-block"></i>
+  </div>
+  <div id="dbResults" class="db-results"></div>
+  <div class="db-pagination" id="dbPagination" style="display:none">
+    <button class="db-page-btn" id="dbPrevBtn" onclick="dbChangePage(-1)">← Prev</button>
+    <span class="db-count" id="dbPageInfo"></span>
+    <button class="db-page-btn" id="dbNextBtn" onclick="dbChangePage(1)">Next →</button>
+  </div>
+</section>
+
+<!-- TRACK PAGE (dynamic) -->
+<div class="track-page" id="trackPage">
+  <button class="track-page-back" onclick="closeTrackPage()">
+    <i class="ti ti-arrow-left"></i>Back to search
+  </button>
+  <div class="track-page-artist" id="tpArtist"></div>
+  <h1 class="track-page-title" id="tpTitle"></h1>
+  <div class="track-page-stats">
+    <div class="track-page-stat">
+      <div class="track-page-stat-icon" style="background:var(--lime-dim)"><i class="ti ti-metronome" style="color:var(--lime)"></i></div>
+      <div class="track-page-stat-label">BPM</div>
+      <div class="track-page-stat-val" id="tpBpm" style="color:var(--lime)">—</div>
+      <div class="track-page-stat-sub">beats per minute</div>
+    </div>
+    <div class="track-page-stat">
+      <div class="track-page-stat-icon" style="background:var(--blue-dim)"><i class="ti ti-music" style="color:var(--blue)"></i></div>
+      <div class="track-page-stat-label">KEY</div>
+      <div class="track-page-stat-val" id="tpKey" style="font-size:20px;padding-top:8px;color:var(--blue)">—</div>
+      <div class="track-page-stat-sub">musical key</div>
+    </div>
+    <div class="track-page-stat">
+      <div class="track-page-stat-icon" style="background:rgba(168,139,250,0.12)"><i class="ti ti-wheel" style="color:#a78bfa"></i></div>
+      <div class="track-page-stat-label">CAMELOT</div>
+      <div class="track-page-stat-val" id="tpCamelot" style="color:#a78bfa">—</div>
+      <div class="track-page-stat-sub">harmonic mixing</div>
+    </div>
+    <div class="track-page-stat">
+      <div class="track-page-stat-icon" style="background:rgba(255,130,100,0.12)"><i class="ti ti-bolt" style="color:var(--rose)"></i></div>
+      <div class="track-page-stat-label">ENERGY</div>
+      <div class="track-page-stat-val" id="tpEnergy" style="color:var(--rose)">—</div>
+      <div class="track-page-stat-sub">intensity level</div>
+    </div>
+  </div>
+  <div class="track-page-cta">
+    <div>
+      <div class="track-page-cta-title">Want to work with this track?</div>
+      <div class="track-page-cta-sub">Use SPLITR to remove vocals, extract stems, convert to MIDI or analyze any audio file — free, no sign-up.</div>
+    </div>
+    <a href="/" class="btn-cta-analyze" onclick="closeTrackPage();return false;">
+      <i class="ti ti-wand"></i>Try SPLITR free
+    </a>
+  </div>
+</div>
 
 <!-- HOW IT WORKS -->
 <section class="section" id="how">
@@ -1757,6 +1926,146 @@ function downloadMidi() {
   document.body.appendChild(a);
   a.click();
   a.remove();
+}
+
+
+const SUPABASE_URL = 'https://qzffwuadeubyuvokpgyn.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6ZmZ3dWFkZXVieXV2b2twZ3luIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NDIxMzIsImV4cCI6MjA5NTExODEzMn0.la3HmEgK32sRpH33nQRP1TkmJ7YjWPNz8KxyeIPM1uI';
+
+let dbQuery = '';
+let dbGenre = '';
+let dbPage = 0;
+const DB_PAGE_SIZE = 10;
+let dbSearchTimeout = null;
+
+function dbSearch(val) {
+  dbQuery = val.trim();
+  dbPage = 0;
+  clearTimeout(dbSearchTimeout);
+  dbSearchTimeout = setTimeout(() => dbFetch(), 350);
+}
+
+function dbSetGenre(btn, genre) {
+  document.querySelectorAll('.db-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  dbGenre = genre;
+  dbPage = 0;
+  dbFetch();
+}
+
+function dbChangePage(dir) {
+  dbPage += dir;
+  dbFetch();
+  document.getElementById('database').scrollIntoView({behavior:'smooth'});
+}
+
+async function dbFetch() {
+  if (!dbQuery && !dbGenre) {
+    document.getElementById('dbResults').innerHTML = '<div class="db-empty">Start typing to search tracks…</div>';
+    document.getElementById('dbPagination').style.display = 'none';
+    return;
+  }
+  document.getElementById('dbLoading').style.display = 'block';
+  document.getElementById('dbResults').innerHTML = '';
+  document.getElementById('dbPagination').style.display = 'none';
+  try {
+    const offset = dbPage * DB_PAGE_SIZE;
+    let url = SUPABASE_URL + '/rest/v1/tracks?select=*&order=popularity.desc&limit=' + DB_PAGE_SIZE + '&offset=' + offset;
+    if (dbQuery) url += '&or=(title.ilike.*' + encodeURIComponent(dbQuery) + '*,artist.ilike.*' + encodeURIComponent(dbQuery) + '*)';
+    if (dbGenre) url += '&genre=ilike.*' + encodeURIComponent(dbGenre) + '*';
+    const countUrl = url.replace('select=*', 'select=id').replace('&limit=' + DB_PAGE_SIZE + '&offset=' + offset, '');
+    const headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY };
+    const [resp, countResp] = await Promise.all([
+      fetch(url, { headers }),
+      fetch(countUrl, { headers: {...headers, 'Prefer': 'count=exact'} })
+    ]);
+    const tracks = await resp.json();
+    const total = parseInt(countResp.headers.get('content-range')?.split('/')[1] || 0);
+    document.getElementById('dbLoading').style.display = 'none';
+    if (!tracks.length) {
+      document.getElementById('dbResults').innerHTML = '<div class="db-empty">No tracks found. Try a different search.</div>';
+      return;
+    }
+    document.getElementById('dbResults').innerHTML = tracks.map(t => {
+      const td = JSON.stringify(t).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      return '<div class="db-track" onclick='openTrackPage(' + td + ')'>' +
+        '<div><div class="db-track-name">' + escHtml(t.title) + '</div><div class="db-track-artist">' + escHtml(t.artist.split(";")[0]) + '</div></div>' +
+        '<div class="db-track-stats">' +
+        '<div class="db-stat"><div class="db-stat-val">' + (t.bpm||'—') + '</div><div class="db-stat-label">BPM</div></div>' +
+        '<div class="db-stat"><div class="db-stat-val db-stat-key-val">' + escHtml(t.key||'—') + '</div><div class="db-stat-label">KEY</div></div>' +
+        '<div class="db-camelot">' + escHtml(t.camelot||'—') + '</div>' +
+        '<div class="db-stat"><div class="db-stat-val">' + (t.energy||'—') + '</div><div class="db-stat-label">ENERGY</div></div>' +
+        '</div></div>';
+    }).join('');
+    const totalPages = Math.ceil(total / DB_PAGE_SIZE);
+    if (totalPages > 1) {
+      document.getElementById('dbPagination').style.display = 'flex';
+      document.getElementById('dbPageInfo').textContent = (dbPage+1) + ' / ' + totalPages + ' (' + total + ' results)';
+      document.getElementById('dbPrevBtn').disabled = dbPage === 0;
+      document.getElementById('dbNextBtn').disabled = dbPage >= totalPages - 1;
+    }
+  } catch(e) {
+    document.getElementById('dbLoading').style.display = 'none';
+    document.getElementById('dbResults').innerHTML = '<div class="db-empty">Error loading results. Try again.</div>';
+    console.error(e);
+  }
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function dbSlugify(text) {
+  return text.toLowerCase().replace(/[^a-z0-9\s-]/g,'').replace(/[\s_]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'');
+}
+
+function openTrackPage(track) {
+  document.getElementById('tpArtist').textContent = track.artist.split(';')[0];
+  document.getElementById('tpTitle').textContent = track.title;
+  document.getElementById('tpBpm').textContent = track.bpm || '—';
+  document.getElementById('tpKey').textContent = track.key || '—';
+  document.getElementById('tpCamelot').textContent = track.camelot || '—';
+  document.getElementById('tpEnergy').textContent = track.energy || '—';
+  const slug = dbSlugify(track.artist.split(';')[0] + '-' + track.title);
+  history.pushState({track}, '', '/track/' + slug);
+  document.title = track.title + ' BPM, Key & Camelot — SPLITR';
+  document.getElementById('trackPage').classList.add('active');
+  document.querySelector('.hero').style.display = 'none';
+  document.getElementById('database') && (document.getElementById('database').style.display = 'none');
+  document.getElementById('trackPage').scrollIntoView({behavior:'smooth'});
+}
+
+function closeTrackPage() {
+  document.getElementById('trackPage').classList.remove('active');
+  document.querySelector('.hero').style.display = '';
+  document.getElementById('database') && (document.getElementById('database').style.display = '');
+  history.pushState({}, '', '/');
+  document.title = 'SPLITR — Free AI Audio Tools: Vocal Remover, BPM Detector, MIDI Extractor';
+  window.scrollTo(0,0);
+}
+
+window.addEventListener('popstate', (e) => {
+  if (!e.state?.track) closeTrackPage();
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  const path = window.location.pathname;
+  if (path.startsWith('/track/')) {
+    const slug = path.replace('/track/', '');
+    loadTrackBySlug(slug);
+  }
+});
+
+async function loadTrackBySlug(slug) {
+  const query = slug.replace(/-/g, ' ');
+  try {
+    const resp = await fetch(
+      SUPABASE_URL + '/rest/v1/tracks?select=*&limit=1&or=(title.ilike.*' + encodeURIComponent(query) + '*,artist.ilike.*' + encodeURIComponent(query) + '*)',
+      { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY } }
+    );
+    const tracks = await resp.json();
+    if (tracks.length) openTrackPage(tracks[0]);
+  } catch(e) { console.error(e); }
 }
 
 function closePopup() {
