@@ -2154,6 +2154,41 @@ function closeLegal() {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLegal(); });
 
+
+async function submitContact() {
+  const name = document.getElementById('contactName').value.trim();
+  const email = document.getElementById('contactEmail').value.trim();
+  const message = document.getElementById('contactMessage').value.trim();
+
+  if (!name || !email || !message) {
+    alert('Please fill in all fields.');
+    return;
+  }
+
+  const btn = document.getElementById('contactBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i>Sending…';
+
+  try {
+    const resp = await fetch('https://vinarexpromo-del--vocal-remover-api.modal.run/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message })
+    });
+
+    if (resp.ok) {
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('contactSuccess').style.display = 'block';
+    } else {
+      throw new Error('Failed');
+    }
+  } catch(e) {
+    alert('Failed to send. Please email us directly at hello@spltr.pro');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send"></i>Send message';
+  }
+}
+
 function closePopup() {
   document.getElementById('popup').classList.remove('open');
 }
@@ -2318,21 +2353,40 @@ document.getElementById('popup').addEventListener('click', function(e) {
     <button class="legal-close" onclick="closeLegal()"><i class="ti ti-x"></i></button>
     <div class="legal-title">Contact Us</div>
     <div class="legal-date">We usually reply within 24 hours</div>
-    <p>For any questions, feedback, bug reports, business inquiries or feature requests — just drop us an email:</p>
-    <p style="font-size:18px;margin:16px 0"><a href="mailto:hello@spltr.pro">hello@spltr.pro</a></p>
-    <p>Or find us on:</p>
-    <ul>
-      <li><a href="https://www.producthunt.com/products/splitr-2" target="_blank">Product Hunt</a></li>
-      <li><a href="https://reddit.com/r/edmproduction" target="_blank">Reddit r/edmproduction</a></li>
-    </ul>
-    <div style="background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:20px;margin-top:24px;display:flex;align-items:center;justify-content:space-between;gap:16px">
-      <div>
-        <div style="font-size:14px;font-weight:500;margin-bottom:4px">Send us a message</div>
-        <div style="font-size:12px;color:var(--text2)">hello@spltr.pro</div>
+
+    <div id="contactForm">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <div>
+          <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:6px">NAME</div>
+          <input id="contactName" type="text" placeholder="Your name"
+            style="width:100%;background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none">
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:6px">EMAIL</div>
+          <input id="contactEmail" type="email" placeholder="your@email.com"
+            style="width:100%;background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none">
+        </div>
       </div>
-      <a href="mailto:hello@spltr.pro" style="background:var(--lime);border:none;border-radius:8px;padding:10px 20px;color:#09090e;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:7px">
-        <i class="ti ti-mail"></i>Email us
-      </a>
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:6px">MESSAGE</div>
+        <textarea id="contactMessage" rows="5" placeholder="Your message…"
+          style="width:100%;background:var(--bg3);border:0.5px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;resize:none;line-height:1.6"></textarea>
+      </div>
+      <button onclick="submitContact()" id="contactBtn"
+        style="width:100%;background:var(--lime);border:none;border-radius:9px;padding:12px;color:#09090e;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+        <i class="ti ti-send"></i>Send message
+      </button>
+      <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:12px">
+        Or email directly: <a href="mailto:hello@spltr.pro" style="color:var(--lime)">hello@spltr.pro</a>
+      </p>
+    </div>
+
+    <div id="contactSuccess" style="display:none;text-align:center;padding:32px 0">
+      <div style="width:56px;height:56px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+        <i class="ti ti-check" style="font-size:24px;color:var(--green)"></i>
+      </div>
+      <div style="font-size:18px;font-weight:500;margin-bottom:8px">Message sent!</div>
+      <div style="font-size:13px;color:var(--text2)">We'll get back to you within 24 hours.</div>
     </div>
   </div>
 </div>
