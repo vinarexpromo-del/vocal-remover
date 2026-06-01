@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/plugins", "destination": "/plugins.html" },
+    { "source": "/timer", "destination": "/timer.html" },
     { "source": "/track/(.*)", "destination": "/index.html" }
   ]
 }
