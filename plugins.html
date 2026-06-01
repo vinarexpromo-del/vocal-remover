@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plugins — Free DAW Plugins by SPLITR</title>
+<meta name="description" content="Free VST3 plugins for music producers by SPLITR. Download TIMER_ — automatic project time tracker for any DAW.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--lime:#c8ff00;
+--lime-dim:rgba(200,255,0,0.12);
+--lime-border:rgba(200,255,0,0.3);
+--bg:#09090e;
+--bg2:#0f0f17;
+--bg3:#14141f;
+--text:#e8e4dc;
+--text2:rgba(232,228,220,0.5);
+--text3:rgba(232,228,220,0.25);
+--border:rgba(255,255,255,0.07);
+--border2:rgba(255,255,255,0.12);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:rgba(9,9,14,0.92);backdrop-filter:blur(12px);z-index:100}
+.logo{font-family:'Space Mono',monospace;font-size:14px;color:var(--lime);letter-spacing:0.1em;text-decoration:none}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:13px;color:var(--text2);text-decoration:none;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-links a.active{color:var(--text)}
+.nav-cta{background:var(--lime-dim);border:0.5px solid var(--lime-border);color:var(--lime) !important;border-radius:6px;padding:6px 14px !important;font-size:12px !important;font-family:'Space Mono',monospace;letter-spacing:0.05em;transition:background 0.2s !important}
+.nav-cta:hover{background:rgba(200,255,0,0.2) !important}
+
+.hero{padding:72px 40px 56px;max-width:1100px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--lime-dim);border:0.5px solid var(--lime-border);border-radius:20px;padding:5px 14px;font-size:11px;color:var(--lime);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:24px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--lime);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+h1{font-size:52px;font-weight:300;line-height:1.06;color:var(--text);max-width:560px;margin-bottom:16px}
+h1 em{font-style:normal;color:var(--lime)}
+.hero-sub{font-size:16px;color:var(--text2);font-weight:300;max-width:480px;line-height:1.65}
+
+.grid-section{max-width:1100px;margin:0 auto;padding:0 40px 80px}
+.section-label{font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px}
+
+.plugins-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+/* Plugin card */
+.plugin-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;transition:border-color 0.2s,transform 0.2s;display:flex;flex-direction:column}
+.plugin-card:hover{border-color:var(--lime-border);transform:translateY(-2px)}
+.plugin-card-preview{background:var(--bg3);border-bottom:0.5px solid var(--border);padding:24px;display:flex;align-items:center;justify-content:center;min-height:160px}
+.mini-plugin{background:#0d0d0d;border:0.5px solid var(--border2);border-radius:10px;width:200px;overflow:hidden}
+.mini-bar{background:#0a0a0a;padding:7px 12px;display:flex;align-items:center;gap:5px;border-bottom:0.5px solid var(--border)}
+.mini-dot{width:7px;height:7px;border-radius:50%}
+.mini-top{padding:8px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid var(--border)}
+.mini-logo{font-family:'Space Mono',monospace;font-size:11px;color:var(--lime)}
+.mini-by{font-family:'Space Mono',monospace;font-size:8px;color:var(--text3)}
+.mini-row{display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid var(--border)}
+.mini-cell{padding:8px 12px;border-right:0.5px solid var(--border)}
+.mini-cell:last-child{border-right:none}
+.mini-val{font-family:'Space Mono',monospace;font-size:9px;color:var(--lime)}
+.mini-lbl{font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-top:2px}
+.mini-time{padding:12px 14px;border-bottom:0.5px solid var(--border)}
+.mini-time-val{font-family:'Space Mono',monospace;font-size:20px;color:var(--lime);line-height:1}
+.mini-time-lbl{font-size:8px;color:var(--text3);margin-top:3px}
+.mini-foot{padding:7px 12px;display:flex;justify-content:space-between}
+.mini-pname{font-family:'Space Mono',monospace;font-size:8px;color:var(--text3)}
+.mini-status{font-size:8px;color:var(--text3)}
+
+.plugin-card-body{padding:24px;flex:1;display:flex;flex-direction:column}
+.plugin-card-tag{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-family:'Space Mono',monospace;color:var(--lime);background:var(--lime-dim);border:0.5px solid var(--lime-border);border-radius:20px;padding:3px 10px;margin-bottom:14px;width:fit-content}
+.plugin-card-name{font-size:20px;font-weight:500;margin-bottom:8px}
+.plugin-card-desc{font-size:13px;color:var(--text2);line-height:1.6;flex:1}
+.plugin-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:0.5px solid var(--border)}
+.plugin-card-meta{font-size:11px;color:var(--text3);font-family:'Space Mono',monospace}
+.plugin-card-cta{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--lime);font-family:'Space Mono',monospace}
+.plugin-card:hover .plugin-card-cta i{transform:translateX(3px)}
+.plugin-card-cta i{transition:transform 0.2s}
+
+/* Coming soon card */
+.plugin-card.soon{opacity:0.45;pointer-events:none}
+.plugin-card.soon .plugin-card-preview{min-height:160px;display:flex;align-items:center;justify-content:center}
+.soon-inner{text-align:center}
+.soon-icon{width:48px;height:48px;border-radius:14px;background:var(--bg2);border:0.5px solid var(--border2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.soon-icon i{font-size:22px;color:var(--text3)}
+.soon-label{font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:0.08em}
+
+footer{border-top:0.5px solid var(--border);padding:32px 40px;display:flex;justify-content:space-between;align-items:center}
+.footer-logo{font-family:'Space Mono',monospace;font-size:12px;color:var(--lime)}
+.footer-text{font-size:12px;color:var(--text3)}
+
+@media(max-width:768px){
+  nav{padding:14px 20px}
+  .nav-links{gap:14px}
+  .hero{padding:48px 20px 40px}
+  h1{font-size:36px}
+  .grid-section{padding:0 20px 60px}
+  .plugins-grid{grid-template-columns:1fr}
+  footer{padding:24px 20px;flex-direction:column;gap:10px;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">SPLITR_</a>
+  <div class="nav-links">
+    <a href="/plugins" class="active">Plugins</a>
+    <a href="/#database">Track Database</a>
+    <a href="/#how">How it works</a>
+    <a href="https://edm-ghost-production.com" target="_blank" class="nav-cta">Need a track? ↗</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge"><div class="dot"></div>Free · Open Source</div>
+  <h1>Free plugins<br>for <em>producers.</em></h1>
+  <p class="hero-sub">Lightweight DAW plugins built by SPLITR. No subscription, no account — just download and use.</p>
+</div>
+
+<div class="grid-section">
+  <div class="section-label">Available now</div>
+  <div class="plugins-grid">
+
+    <!-- TIMER_ card -->
+    <a href="/timer" class="plugin-card">
+      <div class="plugin-card-preview">
+        <div class="mini-plugin">
+          <div class="mini-bar">
+            <div class="mini-dot" style="background:#ff5f57"></div>
+            <div class="mini-dot" style="background:#febc2e"></div>
+            <div class="mini-dot" style="background:#28c840"></div>
+          </div>
+          <div class="mini-top">
+            <div class="mini-logo">TIMER_</div>
+            <div class="mini-by">by splitr_</div>
+          </div>
+          <div class="mini-row">
+            <div class="mini-cell"><div class="mini-val" id="m-total">00:00:00</div><div class="mini-lbl">Total</div></div>
+            <div class="mini-cell"><div class="mini-val" id="m-active">00:00:00</div><div class="mini-lbl">Active</div></div>
+          </div>
+          <div class="mini-time">
+            <div class="mini-time-val" id="m-big">00:00:00</div>
+            <div class="mini-time-lbl">Session time</div>
+          </div>
+          <div class="mini-foot">
+            <div class="mini-pname">MyTrack.als</div>
+            <div class="mini-status" id="m-status">tracking</div>
+          </div>
+        </div>
+      </div>
+      <div class="plugin-card-body">
+        <div class="plugin-card-tag"><div class="dot"></div>VST3 · Windows</div>
+        <div class="plugin-card-name">TIMER_</div>
+        <div class="plugin-card-desc">Automatically tracks how long you spend on each DAW project. Detects active work from audio signal — no manual input needed. Saves with your project file.</div>
+        <div class="plugin-card-footer">
+          <div class="plugin-card-meta">v1.0.0 · 3.66 MB · Free</div>
+          <div class="plugin-card-cta">Download <i class="ti ti-arrow-right"></i></div>
+        </div>
+      </div>
+    </a>
+
+    <!-- Coming soon 1 -->
+    <div class="plugin-card soon">
+      <div class="plugin-card-preview">
+        <div class="soon-inner">
+          <div class="soon-icon"><i class="ti ti-wave-square"></i></div>
+          <div class="soon-label">Coming soon</div>
+        </div>
+      </div>
+      <div class="plugin-card-body">
+        <div class="plugin-card-tag">VST3</div>
+        <div class="plugin-card-name">???_</div>
+        <div class="plugin-card-desc">Next plugin in development. Stay tuned.</div>
+        <div class="plugin-card-footer">
+          <div class="plugin-card-meta">— · — · Free</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coming soon 2 -->
+    <div class="plugin-card soon">
+      <div class="plugin-card-preview">
+        <div class="soon-inner">
+          <div class="soon-icon"><i class="ti ti-cpu"></i></div>
+          <div class="soon-label">Coming soon</div>
+        </div>
+      </div>
+      <div class="plugin-card-body">
+        <div class="plugin-card-tag">VST3</div>
+        <div class="plugin-card-name">???_</div>
+        <div class="plugin-card-desc">Another tool for producers. Coming later.</div>
+        <div class="plugin-card-footer">
+          <div class="plugin-card-meta">— · — · Free</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">SPLITR_</div>
+  <div class="footer-text">Free tools for producers · <a href="/" style="color:var(--lime);text-decoration:none">spltr.pro</a></div>
+</footer>
+
+<script>
+var ts=0,as=0,active=true;
+function pad(n){return n<10?'0'+n:''+n}
+function fmt(s){return pad(Math.floor(s/3600))+':'+pad(Math.floor((s%3600)/60))+':'+pad(s%60)}
+setInterval(function(){
+  ts++;as++;
+  document.getElementById('m-total').textContent=fmt(ts);
+  document.getElementById('m-active').textContent=fmt(as);
+  document.getElementById('m-big').textContent=fmt(as);
+},1000);
+</script>
+
+</body>
+</html>
