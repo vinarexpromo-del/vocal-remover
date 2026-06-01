@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIMER_ — Project Time Tracker VST3 Plugin by splitr_</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--lime:#c8ff00;
+--lime-dim:rgba(200,255,0,0.12);
+--lime-border:rgba(200,255,0,0.3);
+--bg:#09090e;
+--bg2:#0f0f17;
+--bg3:#14141f;
+--text:#e8e4dc;
+--text2:rgba(232,228,220,0.5);
+--text3:rgba(232,228,220,0.25);
+--border:rgba(255,255,255,0.07);
+--border2:rgba(255,255,255,0.12);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:18px 40px;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:rgba(9,9,14,0.92);backdrop-filter:blur(12px);z-index:100}
+.logo{font-family:'Space Mono',monospace;font-size:14px;color:var(--lime);letter-spacing:0.1em;text-decoration:none}
+.nav-links{display:flex;gap:28px;align-items:center}
+.nav-links a{font-size:13px;color:var(--text2);text-decoration:none;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);text-decoration:none;transition:color 0.2s}
+.nav-back:hover{color:var(--lime)}
+
+.hero{padding:72px 40px 56px;max-width:1100px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--lime-dim);border:0.5px solid var(--lime-border);border-radius:20px;padding:5px 14px;font-size:11px;color:var(--lime);font-family:'Space Mono',monospace;letter-spacing:0.06em;margin-bottom:24px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--lime);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+h1{font-size:58px;font-weight:300;line-height:1.04;color:var(--text);max-width:620px;margin-bottom:16px}
+h1 em{font-style:normal;color:var(--lime)}
+.hero-sub{font-size:16px;color:var(--text2);font-weight:300;max-width:480px;line-height:1.65;margin-bottom:40px}
+
+.hero-stats{display:flex;gap:40px;margin-bottom:48px}
+.stat-num{font-family:'Space Mono',monospace;font-size:22px;color:var(--lime)}
+.stat-label{font-size:11px;color:var(--text3);margin-top:3px;letter-spacing:0.04em}
+
+.download-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:520px;margin-bottom:48px}
+.dl-btn{display:flex;align-items:center;gap:12px;padding:16px 20px;border-radius:12px;text-decoration:none;transition:all 0.2s;border:0.5px solid var(--border2);background:var(--bg2);cursor:pointer}
+.dl-btn:hover{border-color:var(--lime-border);background:var(--lime-dim)}
+.dl-btn.disabled{opacity:0.35;cursor:not-allowed;pointer-events:none}
+.dl-icon{width:40px;height:40px;border-radius:10px;background:var(--lime-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dl-icon i{font-size:20px;color:var(--lime)}
+.dl-text{}
+.dl-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.dl-sub{font-size:11px;color:var(--text3);font-family:'Space Mono',monospace}
+.dl-arrow{margin-left:auto;color:var(--text3);font-size:16px}
+.dl-btn:hover .dl-arrow{color:var(--lime)}
+
+.preview-wrap{max-width:1100px;margin:0 auto;padding:0 40px 80px}
+.section-label{font-size:11px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px}
+
+.plugin-preview{background:var(--bg2);border:0.5px solid var(--border2);border-radius:16px;overflow:hidden;max-width:520px}
+.plugin-bar{background:#0a0a0a;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:0.5px solid var(--border)}
+.plugin-dot{width:10px;height:10px;border-radius:50%}
+.plugin-bar-title{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);margin-left:8px}
+.plugin-top{background:#0d0d0d;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid var(--border)}
+.plugin-logo{font-family:'Space Mono',monospace;font-size:13px;color:var(--lime);letter-spacing:0.1em}
+.plugin-by{font-family:'Space Mono',monospace;font-size:9px;color:var(--text3)}
+.plugin-stats-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-bottom:0.5px solid var(--border)}
+.plugin-stat{padding:10px 16px;border-right:0.5px solid var(--border)}
+.plugin-stat:last-child{border-right:none}
+.plugin-stat-val{font-family:'Space Mono',monospace;font-size:10px;color:var(--lime)}
+.plugin-stat-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px}
+.plugin-timers{display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid var(--border)}
+.plugin-timer{padding:20px;border-right:0.5px solid var(--border)}
+.plugin-timer:last-child{border-right:none}
+.plugin-tlabel{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.plugin-livdot{width:5px;height:5px;border-radius:50%;background:var(--lime);animation:blink 1.5s infinite}
+.plugin-time{font-family:'Space Mono',monospace;font-size:28px;color:var(--text);line-height:1;margin-bottom:4px}
+.plugin-time.active{color:var(--lime)}
+.plugin-tsub{font-size:10px;color:var(--text3);margin-bottom:14px}
+.plugin-btn{padding:5px 14px;font-size:10px;border:0.5px solid var(--border2);background:transparent;color:var(--text3);border-radius:3px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.plugin-btn:hover{border-color:var(--border2);color:var(--text2)}
+.plugin-btn.start{border-color:var(--lime-border);color:var(--lime)}
+.plugin-bottom{padding:10px 20px;display:flex;justify-content:space-between;align-items:center}
+.plugin-project{display:flex;align-items:center;gap:8px}
+.plugin-pdot{width:6px;height:6px;border-radius:50%;background:var(--lime);animation:blink 2s infinite}
+.plugin-pname{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3)}
+.plugin-status{font-size:10px;color:var(--text3)}
+
+.features{max-width:1100px;margin:0 auto;padding:0 40px 80px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feature{background:var(--bg2);border:0.5px solid var(--border);border-radius:16px;padding:24px}
+.feature-icon{width:40px;height:40px;border-radius:10px;background:var(--lime-dim);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.feature-icon i{font-size:20px;color:var(--lime)}
+.feature-title{font-size:15px;font-weight:500;margin-bottom:8px}
+.feature-desc{font-size:13px;color:var(--text2);line-height:1.6}
+
+.install-section{max-width:1100px;margin:0 auto;padding:0 40px 80px}
+.install-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+.install-step{padding:24px;background:var(--bg2);border:0.5px solid var(--border);border-radius:16px}
+.install-num{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:12px}
+.install-title{font-size:15px;font-weight:500;margin-bottom:8px}
+.install-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.install-code{font-family:'Space Mono',monospace;font-size:10px;color:var(--lime);background:var(--lime-dim);border:0.5px solid var(--lime-border);border-radius:6px;padding:6px 10px;margin-top:10px;display:inline-block}
+
+footer{border-top:0.5px solid var(--border);padding:32px 40px;display:flex;justify-content:space-between;align-items:center}
+.footer-logo{font-family:'Space Mono',monospace;font-size:12px;color:var(--lime)}
+.footer-text{font-size:12px;color:var(--text3)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://spltr.pro" class="logo">SPLITR_</a>
+  <div class="nav-links">
+    <a href="https://spltr.pro" class="nav-back"><i class="ti ti-arrow-left" style="font-size:14px"></i> Back to spltr.pro</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge"><div class="dot"></div>Free · Open Source · VST3</div>
+  <h1>Track your<br><em>project time.</em></h1>
+  <p class="hero-sub">A lightweight VST3 plugin that automatically tracks how long you spend on your DAW projects. Detects active work from audio signal — no manual input needed.</p>
+
+  <div class="hero-stats">
+    <div>
+      <div class="stat-num">0%</div>
+      <div class="stat-label">CPU usage</div>
+    </div>
+    <div>
+      <div class="stat-num">9 MB</div>
+      <div class="stat-label">File size</div>
+    </div>
+    <div>
+      <div class="stat-num">Free</div>
+      <div class="stat-label">Forever</div>
+    </div>
+  </div>
+
+  <div class="download-grid">
+    <a href="https://github.com/vinarexpromo-del/vocal-remover/releases/download/v1.0.0/ProjectTimer_Setup_v1.0.0.exe" class="dl-btn" download>
+      <div class="dl-icon"><i class="ti ti-brand-windows"></i></div>
+      <div class="dl-text">
+        <div class="dl-name">Windows</div>
+        <div class="dl-sub">VST3 · x64</div>
+      </div>
+      <i class="ti ti-download dl-arrow"></i>
+    </a>
+    <div class="dl-btn disabled">
+      <div class="dl-icon"><i class="ti ti-brand-apple"></i></div>
+      <div class="dl-text">
+        <div class="dl-name">macOS</div>
+        <div class="dl-sub">Coming soon</div>
+      </div>
+      <i class="ti ti-clock dl-arrow"></i>
+    </div>
+  </div>
+</div>
+
+<div class="preview-wrap">
+  <div class="section-label">Plugin preview</div>
+  <div class="plugin-preview">
+    <div class="plugin-bar">
+      <div class="plugin-dot" style="background:#ff5f57"></div>
+      <div class="plugin-dot" style="background:#febc2e"></div>
+      <div class="plugin-dot" style="background:#28c840"></div>
+      <span class="plugin-bar-title">ProjectTimer · MyTrack.als</span>
+    </div>
+    <div class="plugin-top">
+      <div class="plugin-logo">TIMER_</div>
+      <div class="plugin-by">by splitr_</div>
+    </div>
+    <div class="plugin-stats-row">
+      <div class="plugin-stat"><div class="plugin-stat-val" id="s-total">00:00:00</div><div class="plugin-stat-lbl">Total open</div></div>
+      <div class="plugin-stat"><div class="plugin-stat-val" id="s-active">00:00:00</div><div class="plugin-stat-lbl">Active</div></div>
+      <div class="plugin-stat"><div class="plugin-stat-val" id="s-sess">0</div><div class="plugin-stat-lbl">Sessions</div></div>
+      <div class="plugin-stat"><div class="plugin-stat-val" id="s-pct">0%</div><div class="plugin-stat-lbl">Ratio</div></div>
+    </div>
+    <div class="plugin-timers">
+      <div class="plugin-timer">
+        <div class="plugin-tlabel"><div class="plugin-livdot"></div>Total time</div>
+        <div class="plugin-time" id="p-total">00:00:00</div>
+        <div class="plugin-tsub">Project is open</div>
+        <button class="plugin-btn" onclick="resetTotal()">Reset</button>
+      </div>
+      <div class="plugin-timer">
+        <div class="plugin-tlabel"><div class="plugin-livdot" id="active-dot" style="background:var(--text3);animation:none"></div>Active time</div>
+        <div class="plugin-time" id="p-active">00:00:00</div>
+        <div class="plugin-tsub" id="p-sub">Detecting audio signal…</div>
+        <button class="plugin-btn start" id="p-btn" onclick="toggleActive()">▶ Start</button>
+      </div>
+    </div>
+    <div class="plugin-bottom">
+      <div class="plugin-project"><div class="plugin-pdot"></div><div class="plugin-pname">MyTrack.als</div></div>
+      <div class="plugin-status" id="p-status">Open · tracking</div>
+    </div>
+  </div>
+</div>
+
+<div class="features">
+  <div class="feature">
+    <div class="feature-icon"><i class="ti ti-wave-square"></i></div>
+    <div class="feature-title">Audio-aware tracking</div>
+    <div class="feature-desc">Active timer starts automatically when audio signal is detected in the buffer. Pauses after 60 seconds of silence.</div>
+  </div>
+  <div class="feature">
+    <div class="feature-icon"><i class="ti ti-device-floppy"></i></div>
+    <div class="feature-title">Saves with project</div>
+    <div class="feature-desc">Time data is saved inside your DAW project file. Reopen the project and pick up exactly where you left off.</div>
+  </div>
+  <div class="feature">
+    <div class="feature-icon"><i class="ti ti-cpu"></i></div>
+    <div class="feature-title">Zero CPU impact</div>
+    <div class="feature-desc">Timer runs at 1-second intervals in the UI thread. Audio processing is a simple magnitude check — negligible overhead.</div>
+  </div>
+</div>
+
+<div class="install-section">
+  <div class="section-label">Installation</div>
+  <div class="install-steps">
+    <div class="install-step">
+      <div class="install-num">01</div>
+      <div class="install-title">Download & run installer</div>
+      <div class="install-desc">Run ProjectTimer_Setup_v1.0.0.exe and follow the steps. The plugin will be installed automatically.</div>
+      <div class="install-code">ProjectTimer_Setup_v1.0.0.exe</div>
+    </div>
+    <div class="install-step">
+      <div class="install-num">02</div>
+      <div class="install-title">Scan for plugins in your DAW</div>
+      <div class="install-desc">Open your DAW (Ableton, FL Studio, Cubase, etc.) and run a VST3 plugin scan. ProjectTimer will appear in the list.</div>
+      <div class="install-code">C:\Program Files\Common Files\VST3\</div>
+    </div>
+    <div class="install-step">
+      <div class="install-num">03</div>
+      <div class="install-title">Add to your Master track</div>
+      <div class="install-desc">Drop TIMER_ on the Master (Main) track so it receives the full mix signal. This ensures the active timer detects audio correctly across all channels.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">SPLITR_</div>
+  <div class="footer-text">TIMER_ v1.0.0 · Free VST3 plugin · <a href="https://spltr.pro" style="color:var(--lime);text-decoration:none">spltr.pro</a></div>
+</footer>
+
+<script>
+var ts=0,as=0,active=false,sess=0;
+function pad(n){return n<10?'0'+n:''+n}
+function fmt(s){return pad(Math.floor(s/3600))+':'+pad(Math.floor((s%3600)/60))+':'+pad(s%60)}
+setInterval(function(){
+  ts++;
+  if(active)as++;
+  document.getElementById('p-total').textContent=fmt(ts);
+  document.getElementById('p-active').textContent=fmt(as);
+  document.getElementById('s-total').textContent=fmt(ts);
+  document.getElementById('s-active').textContent=fmt(as);
+  document.getElementById('s-pct').textContent=ts>0?Math.round(as/ts*100)+'%':'0%';
+},1000);
+function toggleActive(){
+  active=!active;
+  var btn=document.getElementById('p-btn');
+  var dot=document.getElementById('active-dot');
+  var disp=document.getElementById('p-active');
+  if(active){
+    sess++;
+    document.getElementById('s-sess').textContent=sess;
+    btn.textContent='⏸ Stop';
+    btn.style.borderColor='rgba(255,92,92,0.4)';
+    btn.style.color='rgba(255,92,92,0.8)';
+    dot.style.background='var(--lime)';
+    dot.style.animation='blink 1.5s infinite';
+    disp.classList.add('active');
+    document.getElementById('p-sub').textContent='Session running';
+    document.getElementById('p-status').textContent='Active · working';
+  } else {
+    btn.textContent='▶ Start';
+    btn.style.borderColor='var(--lime-border)';
+    btn.style.color='var(--lime)';
+    dot.style.background='var(--text3)';
+    dot.style.animation='none';
+    disp.classList.remove('active');
+    document.getElementById('p-sub').textContent='Detecting audio signal…';
+    document.getElementById('p-status').textContent='Open · tracking';
+  }
+}
+function resetTotal(){ts=0;}
+</script>
+</body>
+</html>
